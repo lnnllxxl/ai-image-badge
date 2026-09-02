@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">C2PA付きの人間制作テスト画像</title>
+  <desc id="desc">AI IMAGE BADGE の非AI C2PA表示テスト用画像</desc>
+  <metadata>
+    c2pa.assertions
+    Content Credentials
+    digitalSourceType: digitalCapture
+    Creator tool: Camera
+  </metadata>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0284c7"/>
+      <stop offset="1" stop-color="#e0f2fe"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#sky)"/>
+  <circle cx="650" cy="95" r="54" fill="#fef3c7"/>
+  <path d="M0 400 190 185l145 165 115-120 220 195 65-80 65 58v97H0Z" fill="#334155"/>
+  <path d="M0 430c170-35 300-8 425 8 140 18 245-22 375-17v79H0Z" fill="#166534"/>
+</svg>

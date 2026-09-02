@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">青色の通常テスト画像</title>
+  <desc id="desc">生成AIの印を含まないテスト画像</desc>
+  <metadata>
+    Creator tool: SVG editor
+    Digital source type: human-made illustration
+  </metadata>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0ea5e9"/>
+      <stop offset="1" stop-color="#dbeafe"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#sky)"/>
+  <circle cx="650" cy="95" r="54" fill="#fef3c7"/>
+  <path d="M0 390 180 170l154 178 106-124 210 196 80-92 70 62v110H0Z" fill="#334155"/>
+  <path d="m110 255 70-85 62 72-29-18-31 14-26-18Z" fill="#f8fafc"/>
+  <path d="M0 426c168-34 299-8 423 8 143 18 247-22 377-17v83H0Z" fill="#14532d"/>
+</svg>

@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "AI IMAGE BADGE",
+  "version": "0.12.0",
+  "description": "OpenAI SynthID、来歴、切替可能な3つのローカル画像モデル、周波数・ノイズ特徴を統合し、生成AI画像に判定理由つきのバッジを表示します。",
+  "minimum_chrome_version": "116",
+  "permissions": [
+    "scripting",
+    "storage",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; worker-src 'self'"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "AI IMAGE BADGE",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_popup": "popup/popup.html"
+  },
+  "options_page": "options/options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "editions/release.js",
+        "url-rules.js",
+        "content/metadata-fallback.js",
+        "content/badge-presentation.js",
+        "content/content.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ]
+}

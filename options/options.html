@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI IMAGE BADGE の設定</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main>
+    <p class="eyebrow"><span id="app-name">AI IMAGE BADGE</span><span id="app-version" class="version">v…</span></p>
+    <h1>設定</h1>
+    <p class="intro">通常の解析は端末内で行います。OpenAI SynthID検証を有効にした場合だけ、対象画像をOpenAIのContent Provenance APIへ送信します。</p>
+
+    <form id="settings">
+      <label class="row">
+        <span><b>バッジを表示する</b><small>URLルールで許可された対象ページの検出を有効にします。</small></span>
+        <input type="checkbox" name="enabled">
+      </label>
+      <div class="row list-row">
+        <label for="urlAllowList"><b>URL許可リスト</b><small>1行に1ルール。空欄ならすべてのHTTP/HTTPSページを許可します。入力すると一致したページだけで動作します。</small></label>
+        <textarea id="urlAllowList" name="urlAllowList" rows="5" spellcheck="false" placeholder="example.com&#10;https://news.example.jp/ai/*"></textarea>
+      </div>
+      <div class="row list-row">
+        <label for="urlExcludeList"><b>URL除外リスト</b><small>1行に1ルール。許可リストより優先されます。ドメインだけの指定はサブドメインにも一致し、*をワイルドカードとして使えます。</small></label>
+        <textarea id="urlExcludeList" name="urlExcludeList" rows="5" spellcheck="false" placeholder="private.example.com&#10;https://example.jp/account/*"></textarea>
+      </div>
+      <label class="row">
+        <span><b>「AIかも」も表示する</b><small>根拠が限定的、不一致、画像取得不能、または生成由来を確認できないC2PA画像にも表示します。</small></span>
+        <input type="checkbox" name="showLikely">
+      </label>
+      <label class="row">
+        <span><b>「非生成かも」も表示する</b><small>生成AIを示す情報が見つからなかった画像にも灰色のバッジを表示します。</small></span>
+        <input type="checkbox" name="showUndetermined">
+      </label>
+      <label class="row">
+        <span><b>ページ上の説明文を使う</b><small>alt、title、キャプションに「AI生成」などの表現があるか確認します。</small></span>
+        <input type="checkbox" name="usePageHints">
+      </label>
+      <label class="row">
+        <span><b>ローカル画像モデルを使う</b><small>選択したViTモデルで画像のピクセルを端末内解析します。初回は同梱モデルの読み込みに時間がかかります。</small></span>
+        <input type="checkbox" name="usePixelClassifier">
+      </label>
+      <label class="row model-row">
+        <span><b>ローカル判定モデル</b><small>モデルごとに学習データと出力傾向が異なります。変更して保存すると、開いているページを選択モデルで再判定します。</small></span>
+        <select name="localModel" aria-label="ローカル判定モデル">
+          <option value="community">Community Forensics ViT（標準・87MB）</option>
+          <option value="distilled">Distilled ViT Q4（軽量・11MB）</option>
+          <option value="capcheck">CapCheck ViT-Base Q4（CIFAKE・57MB）</option>
+          <option value="community-forensics-custom" disabled>Community Forensics Custom（学習モデル未導入）</option>
+          <option value="resnet18-custom" disabled>ResNet-18 Custom（学習モデル未導入）</option>
+          <option value="chatgpt-custom" disabled>旧カスタムモデル（学習モデル未導入）</option>
+        </select>
+      </label>
+      <label class="row">
+        <span><b>グラフィックボード（GPU）を使用する</b><small>ローカル画像モデルをWebGPUで高速化します。利用できない環境やGPU実行エラー時は、自動的にCPU（WASM）へ切り替えます。既定はオフです。</small></span>
+        <input type="checkbox" name="useGpuAcceleration">
+      </label>
+      <label class="row size-row">
+        <span><b>「AIかも」のローカル判定しきい値</b><small>モデルの生成AIらしさがこの値以上なら「AIかも」にします。低くすると検出が増えますが、誤判定も増えやすくなります。</small></span>
+        <span class="size-inputs">
+          <input type="number" name="localLikelyThreshold" min="1" max="99" step="1" aria-label="AI可能性判定しきい値"> %
+        </span>
+      </label>
+      <label class="row size-row">
+        <span><b>「AI【モデル判定】」の強いローカル判定しきい値</b><small>この値以上かつ周波数解析・URL・説明文の根拠が一致した場合に「AI【モデル判定】」にします。「AIかも」のしきい値未満には設定できません。</small></span>
+        <span class="size-inputs">
+          <input type="number" name="localConfirmedThreshold" min="1" max="99" step="1" aria-label="強いAI判定しきい値"> %
+        </span>
+      </label>
+      <label class="row">
+        <span><b>周波数・ノイズ解析を使う</b><small>周期性、残差ノイズ、8px境界を補助根拠にします。この解析だけでAIとは判定しません。</small></span>
+        <input type="checkbox" name="useFrequencyAnalysis">
+      </label>
+      <label class="row warning-row">
+        <span><b>OpenAI SynthID検証を使う（最優先）</b><small>画像をOpenAI公式APIへアップロードし、SynthIDを最優先、次に信頼済みC2PAを確認します。画像取得時に認証用Cookieは送らず、ログインが必要な画像はOpenAIへ送信しません。SNSで変換・圧縮された画像は検出できない場合があります。API利用料・送信データにはOpenAIの条件が適用されます。既定はオフです。</small></span>
+        <input type="checkbox" name="useOpenAiProvenance">
+      </label>
+      <div class="row secret-row">
+        <label for="openAiApiKey"><b>OpenAI APIキー</b><small>この端末のChromeローカル領域だけに保存し、同期しません。ただし拡張機能ストレージは端末上で暗号化されないため、Chromeプロフィールを読み取れるプロセスから参照される可能性があります。本拡張専用のOpenAIプロジェクトとAPIキーを作成し、プロジェクトの利用上限を低めに設定してください。</small></label>
+        <span class="secret-controls">
+          <input id="openAiApiKey" name="openAiApiKey" type="password" autocomplete="off" spellcheck="false" placeholder="sk-…" aria-label="OpenAI APIキー（暗号化されずローカル保存）">
+          <button id="toggle-key" type="button" class="secondary compact">表示</button>
+        </span>
+      </div>
+      <label class="row size-row">
+        <span><b>1ページあたりのOpenAI検証上限</b><small>重複URLは1回として数えます。上限を超えた画像はローカル解析だけ行います。</small></span>
+        <span class="size-inputs">
+          <input type="number" name="openAiMaxChecksPerPage" min="1" max="100" step="1" aria-label="OpenAI検証上限"> 件
+        </span>
+      </label>
+      <label class="row">
+        <span><b>CSS背景画像も確認する</b><small>ページによっては表示が少し重くなることがあります。</small></span>
+        <input type="checkbox" name="scanCssBackgrounds">
+      </label>
+      <label class="row size-row">
+        <span><b>確認する画像の最小サイズ</b><small>小さなアイコンを除外します。</small></span>
+        <span class="size-inputs">
+          <input type="number" name="minWidth" min="24" max="1000" step="8" aria-label="最小幅"> ×
+          <input type="number" name="minHeight" min="24" max="1000" step="8" aria-label="最小高さ"> px
+        </span>
+      </label>
+      <div class="buttons">
+        <button type="submit">保存</button>
+        <button type="button" id="reset" class="secondary">初期設定に戻す</button>
+        <span id="saved" role="status"></span>
+      </div>
+    </form>
+
+    <section class="notice">
+      <h2>判定について</h2>
+      <p>URLルールは閲覧中のページURLへ適用され、画像配信元URLには適用されません。除外リストが常に優先されます。同梱3モデルと追加学習モデルの確率は同じ尺度ではなく、画像の編集・圧縮・未知の生成器で結果が変わります。</p>
+    </section>
+  </main>
+  <script src="options.js"></script>
+</body>
+</html>

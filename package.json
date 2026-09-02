@@ -1,0 +1,12 @@
+{
+  "name": "ai-image-badge-release",
+  "version": "0.12.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check background.js && node --check detector.js && node --check openai-provenance.js && node --check provenance-url.js && node --check url-rules.js && node --check editions/release.js && node --check content/metadata-fallback.js && node --check content/badge-presentation.js && node --check content/content.js && node --check popup/popup.js && node --check options/options.js && node --check test/test-page.js && node --check ml/offscreen.js && node --check ml/model-detector.js && node --check ml/preprocess.js && node --check ml/forensics.js"
+  },
+  "dependencies": {
+    "onnxruntime-web": "1.23.0"
+  }
+}

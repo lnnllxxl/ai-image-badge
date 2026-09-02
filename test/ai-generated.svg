@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">紫色の生成テスト画像</title>
+  <desc id="desc">AI IMAGE BADGE のローカルテスト用画像</desc>
+  <metadata>
+    Generator: Stable Diffusion XL
+    parameters: violet abstract landscape
+    Negative prompt: low quality
+    Steps: 30, Sampler: DPM++ 2M, CFG scale: 7
+  </metadata>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#312e81"/>
+      <stop offset=".48" stop-color="#7c3aed"/>
+      <stop offset="1" stop-color="#ec4899"/>
+    </linearGradient>
+    <radialGradient id="sun">
+      <stop offset="0" stop-color="#fff7ed"/>
+      <stop offset=".28" stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#sky)"/>
+  <circle cx="600" cy="130" r="120" fill="url(#sun)"/>
+  <path d="M0 380 180 205l115 108 100-78 180 145 98-92 127 94v118H0Z" fill="#111827" fill-opacity=".66"/>
+  <path d="M0 424c147-45 244-13 374 5 147 21 257-39 426-23v94H0Z" fill="#090d1a"/>
+</svg>

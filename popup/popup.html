@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI IMAGE BADGE</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main>
+    <header>
+      <span class="mark" aria-hidden="true">✦</span>
+      <div>
+        <div class="title-row">
+          <h1 id="app-name">AI IMAGE BADGE</h1>
+          <span id="app-version" class="version">v…</span>
+        </div>
+        <p id="state">ページを確認しています…</p>
+      </div>
+    </header>
+    <p id="page-url" class="page-url">URLを取得しています…</p>
+
+    <label class="power-row">
+      <span><b>バッジ表示</b><small id="power-state">状態を確認中…</small></span>
+      <input id="enabled-toggle" type="checkbox" role="switch" aria-label="バッジ表示のオン・オフ">
+    </label>
+
+    <section class="counts" aria-label="検出結果">
+      <div><strong id="confirmed">…</strong><span>AI判定</span></div>
+      <div><strong id="likely">…</strong><span>AIかも</span></div>
+      <div><strong id="undetermined">…</strong><span>非生成かも</span></div>
+      <div><strong id="inspected">…</strong><span>確認済み</span></div>
+    </section>
+
+    <p class="legend"><b>AI判定</b> はOpenAI SynthID、生成AI由来のC2PA、またはモデル等による強い判定です。<b>AIかも</b> は根拠が限定的・不一致・取得不能の結果、<b>非生成かも</b> は生成AIの根拠が見つからない結果です。</p>
+    <p id="model-note" class="network-note">ローカル画像モデル: 状態を確認中…</p>
+    <p id="openai-note" class="network-note" hidden></p>
+    <details id="openai-log" class="api-log" hidden>
+      <summary>OpenAI APIログ（現在のページ）</summary>
+      <p>画像やAPIキーはログに保存しません。ページの再読み込みまたは再確認で消去されます。</p>
+      <ol id="openai-log-list"></ol>
+    </details>
+    <p id="network-note" class="network-note" hidden></p>
+
+    <div class="actions">
+      <button id="rescan" type="button">このページを再確認</button>
+      <button id="options" type="button" class="secondary">設定</button>
+      <button id="test-page" type="button" class="secondary full">テストページを開く</button>
+    </div>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

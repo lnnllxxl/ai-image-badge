@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">OpenAI SynthID 操作デモ</title>
+  <desc id="desc">AI IMAGE BADGE のバッジ表示と詳細バルーンを確認する模擬画像</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#052e2b"/>
+      <stop offset=".48" stop-color="#0f766e"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#ccfbf1" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#5eead4" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#background)"/>
+  <circle cx="400" cy="250" r="210" fill="url(#glow)"/>
+  <g fill="none" stroke="#f0fdfa" stroke-width="10" opacity=".9">
+    <circle cx="330" cy="250" r="92"/>
+    <circle cx="470" cy="250" r="92"/>
+    <path d="M238 250h324"/>
+  </g>
+  <text x="400" y="390" fill="#f0fdfa" font-family="system-ui, sans-serif" font-size="34" font-weight="700" text-anchor="middle">SynthID UI DEMO</text>
+</svg>

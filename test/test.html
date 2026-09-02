@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI IMAGE BADGE テストページ</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #e2e8f0; background: #07101f; }
+    main { width: min(1080px, calc(100% - 32px)); margin: 40px auto 80px; }
+    h1 { margin-bottom: 6px; color: #fff; }
+    h1 small { color: #94a3b8; font-size: 13px; font-weight: 700; }
+    .intro { margin-top: 0; color: #94a3b8; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(500px, 100%), 1fr)); gap: 18px; margin-top: 28px; }
+    figure { margin: 0; overflow: hidden; border: 1px solid #263449; border-radius: 14px; background: #111b2e; }
+    img, .background-test { display: block; width: 100%; aspect-ratio: 8 / 5; object-fit: cover; background-size: cover; background-position: center; }
+    .background-test { background-image: url("ai-generated.svg"); }
+    figcaption { padding: 14px; }
+    figcaption strong { display: block; color: #fff; }
+    figcaption span { display: block; margin-top: 4px; color: #94a3b8; font-size: 13px; line-height: 1.5; }
+    code { color: #c4b5fd; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1><span id="app-name">AI IMAGE BADGE</span> 動作テスト <small id="app-version">v…</small></h1>
+    <p class="intro">拡張機能のポップアップから開いたテストページです。テスト画像は800×500pxです。画像右上のバッジを押すと、判定理由が表示されます。</p>
+    <section class="grid">
+      <figure>
+        <img src="openai-synthid-demo.svg" alt="OpenAI SynthID操作デモ" data-ai-image-badge-demo="openai-synthid">
+        <figcaption><strong>AI【SynthID】バッジが付くデモ画像</strong><span>バッジ表示と詳細バルーンの操作確認用です。模擬判定のためOpenAI APIは呼び出さず、料金も発生しません。</span></figcaption>
+      </figure>
+      <figure>
+        <img src="ai-generated.svg" alt="紫色の抽象画像">
+        <figcaption><strong>AI【モデル判定】バッジが付く画像</strong><span>画像ファイル内に <code>Stable Diffusion</code> の生成メタデータがあります。クリックすると判定方式を確認できます。</span></figcaption>
+      </figure>
+      <figure>
+        <img src="c2pa-ai-generated.svg" alt="C2PA付きの紫色の生成テスト画像">
+        <figcaption><strong>AI【C2PA】バッジが付く画像</strong><span><code>C2PA trainedAlgorithmicMedia</code> のテスト用記録があります。</span></figcaption>
+      </figure>
+      <figure>
+        <img src="c2pa-authentic.svg" alt="C2PA付きの人間制作テスト画像">
+        <figcaption><strong>AIかも【C2PA】バッジが付く画像</strong><span>C2PAはありますが、生成AI由来を示す記録はありません。</span></figcaption>
+      </figure>
+      <figure>
+        <img src="authentic.svg" alt="AI-generated abstract artwork">
+        <figcaption><strong>AIかも バッジが付く画像</strong><span>画像自体に生成メタデータはありませんが、alt説明文だけが生成AIを示しています。</span></figcaption>
+      </figure>
+      <figure>
+        <img src="authentic.svg" alt="青空と山を表す抽象画像">
+        <figcaption><strong>非生成かもバッジが付く画像</strong><span>生成AIを示す手がかりがないため、灰色の「非生成かも」を表示し、詳細にはローカルモデルスコアを表示します。</span></figcaption>
+      </figure>
+      <figure>
+        <div class="background-test" role="img" aria-label="紫色の抽象背景"></div>
+        <figcaption><strong>CSS背景画像のテスト</strong><span>設定で「CSS背景画像も確認する」を有効にすると AI【モデル判定】バッジが付きます。</span></figcaption>
+      </figure>
+      <figure>
+        <img src="https://raw.githubusercontent.com/CompVis/stable-diffusion/main/assets/stable-samples/txt2img/merged-0006.png" alt="Stable Diffusion公式リポジトリのAI-generated sample">
+        <figcaption><strong>実際のHTTPS画像URL</strong><span>GitHub上のStable Diffusion公式サンプルを取得します。URL／説明文だけが根拠の場合は「AIかも」になります。</span></figcaption>
+      </figure>
+    </section>
+  </main>
+  <script src="test-page.js"></script>
+  <script src="../content/badge-presentation.js"></script>
+  <script src="../content/content.js"></script>
+</body>
+</html>

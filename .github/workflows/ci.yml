@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out source and Git LFS models
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verify Git LFS model checkout
+        shell: bash
+        run: |
+          git lfs ls-files
+          test "$(wc -c < model/model.onnx)" -gt 1000000
+          test "$(wc -c < model/distilled-vit-q4.onnx)" -gt 1000000
+          test "$(wc -c < model/capcheck-vit-q4.onnx)" -gt 1000000
+
+      - name: Check JavaScript syntax
+        run: npm run check

@@ -1,0 +1,87 @@
+{
+  "default_model": "community",
+  "models": {
+    "community": {
+      "label": "Community Forensics ViT",
+      "model_id": "buildborderless/CommunityForensics-DeepfakeDet-ViT@ac6ee457bea9",
+      "weights": "model.onnx",
+      "input_size": 384,
+      "preprocess": "community",
+      "image_mean": [
+        0.48145466,
+        0.4578275,
+        0.40821073
+      ],
+      "image_std": [
+        0.26862954,
+        0.26130258,
+        0.27577711
+      ],
+      "views": [
+        "native",
+        "squash"
+      ],
+      "output": {
+        "type": "binary-logit"
+      },
+      "calibration": {
+        "a": 0.464414,
+        "b": 3.2143
+      },
+      "threshold": 0.5,
+      "source": "https://huggingface.co/buildborderless/CommunityForensics-DeepfakeDet-ViT"
+    },
+    "distilled": {
+      "label": "Distilled ViT Q4",
+      "model_id": "onnx-community/ai-image-detect-distilled-ONNX@7f067e23521e",
+      "weights": "distilled-vit-q4.onnx",
+      "input_size": 224,
+      "preprocess": "vit-bilinear",
+      "image_mean": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "image_std": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "views": [
+        "resize"
+      ],
+      "output": {
+        "type": "softmax",
+        "ai_index": 0
+      },
+      "threshold": 0.5,
+      "source": "https://huggingface.co/onnx-community/ai-image-detect-distilled-ONNX"
+    },
+    "capcheck": {
+      "label": "CapCheck ViT-Base Q4",
+      "model_id": "onnx-community/ai-image-detection-ONNX@e3cfe99f2841",
+      "weights": "capcheck-vit-q4.onnx",
+      "input_size": 224,
+      "preprocess": "vit-bilinear",
+      "image_mean": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "image_std": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "views": [
+        "resize"
+      ],
+      "output": {
+        "type": "softmax",
+        "ai_index": 1
+      },
+      "threshold": 0.5,
+      "source": "https://huggingface.co/onnx-community/ai-image-detection-ONNX"
+    }
+  }
+}
