@@ -1,3 +1,5 @@
+const t = (key, fallback, substitutions) => globalThis.AiImageBadgeI18n?.t(key, fallback, substitutions) || fallback;
+globalThis.AiImageBadgeI18n?.localizeDocument();
 async function activeTab() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   return tab;
@@ -59,7 +61,7 @@ function renderPower(enabled) {
   const toggle = document.querySelector("#enabled-toggle");
   const label = document.querySelector("#power-state");
   toggle.checked = Boolean(enabled);
-  label.textContent = enabled ? "オン：画像を確認します" : "オフ：バッジを表示しません";
+  label.textContent = enabled ? t("powerOn", "オン：画像を確認します") : t("powerOff", "オフ：バッジを表示しません");
 }
 
 function renderOpenAiLogs(stats) {
@@ -77,7 +79,7 @@ function renderOpenAiLogs(stats) {
   if (logs.length === 0) {
     const item = document.createElement("li");
     item.className = "info";
-    item.textContent = "まだAPI結果はありません。画像が表示領域に近づくと検証します。";
+    item.textContent = t("noApiLogs", "まだAPI結果はありません。画像が表示領域に近づくと検証します。");
     list.append(item);
     return;
   }
@@ -86,12 +88,12 @@ function renderOpenAiLogs(stats) {
     const item = document.createElement("li");
     item.className = ["success", "error", "info"].includes(entry.level) ? entry.level : "info";
     const time = Number.isFinite(Number(entry.at))
-      ? new Date(Number(entry.at)).toLocaleTimeString("ja-JP", { hour12: false })
-      : "時刻不明";
+      ? new Date(Number(entry.at)).toLocaleTimeString(globalThis.AiImageBadgeI18n?.uiLocale() || "ja-JP", { hour12: false })
+      : t("unknownTime", "時刻不明");
     const heading = document.createElement("b");
-    heading.textContent = `${time} ${entry.message || "結果不明"}`;
+    heading.textContent = `${time} ${entry.message || t("unknownResult", "結果不明")}`;
     const source = document.createElement("small");
-    source.textContent = `対象: ${entry.source || "画像"}${entry.code ? ` / コード: ${entry.code}` : ""}`;
+    source.textContent = t("logSource", `対象: ${entry.source || t("image", "画像")}${entry.code ? ` / コード: ${entry.code}` : ""}`, [entry.source || t("image", "画像"), entry.code ? t("logCode", ` / コード: ${entry.code}`, [entry.code]) : ""]);
     item.append(heading, source);
     list.append(item);
   }
@@ -104,19 +106,19 @@ function render(stats, context = {}) {
   const networkNote = document.querySelector("#network-note");
   if (!stats) {
     const url = context.tab?.url || "";
-    pageUrl.textContent = url || "URLを取得できませんでした";
+    pageUrl.textContent = url || t("unknownUrl", "URLを取得できませんでした");
     pageUrl.title = url;
     networkNote.hidden = false;
 
     if (isChromeWebStore(url)) {
-      state.textContent = "Chromeウェブストアでは動作できません";
-      networkNote.textContent = "Chromeの保護仕様により、拡張機能はウェブストアのページへ処理を追加できません。別のWebサイトでお試しください。";
+      state.textContent = t("storeBlocked", "Chromeウェブストアでは動作できません");
+      networkNote.textContent = t("storeBlockedHelp", "Chromeの保護仕様により、拡張機能はウェブストアのページへ処理を追加できません。別のWebサイトでお試しください。");
     } else if (!/^https?:\/\//i.test(url)) {
-      state.textContent = "このページはChromeの保護対象です";
-      networkNote.textContent = "通常の http:// または https:// ページを開いてください。chrome://、新しいタブ、設定画面などでは動作しません。";
+      state.textContent = t("protectedPage", "このページはChromeの保護対象です");
+      networkNote.textContent = t("protectedPageHelp", "通常の http:// または https:// ページを開いてください。chrome://、新しいタブ、設定画面などでは動作しません。");
     } else {
-      state.textContent = "このタブへ接続できませんでした";
-      networkNote.textContent = "ページを一度再読み込みしてから、もう一度このポップアップを開いてください。";
+      state.textContent = t("tabConnectionFailed", "このタブへ接続できませんでした");
+      networkNote.textContent = t("reloadPageHelp", "ページを一度再読み込みしてから、もう一度このポップアップを開いてください。");
     }
     document.querySelector("#rescan").disabled = !canInject(url);
     renderOpenAiLogs(null);
@@ -126,14 +128,14 @@ function render(stats, context = {}) {
   renderPower(stats.enabled);
 
   state.textContent = !stats.enabled
-    ? "設定で一時停止中"
+    ? t("paused", "設定で一時停止中")
     : stats.pageAllowed === false
       ? stats.urlAccessReason === "excluded"
-        ? "URL除外リストにより停止中"
-        : "URL許可リストの対象外です"
+        ? t("excludedPage", "URL除外リストにより停止中")
+        : t("notAllowedPage", "URL許可リストの対象外です")
       : context.injected
-        ? "このページへ接続しました"
-        : `${stats.totalImages}件の画像があるページで動作中`;
+        ? t("pageConnected", "このページへ接続しました")
+        : t("activeImageCount", `${stats.totalImages}件の画像があるページで動作中`, [stats.totalImages]);
   pageUrl.textContent = stats.pageUrl;
   pageUrl.title = stats.pageUrl;
   document.querySelector("#confirmed").textContent = stats.confirmed;
@@ -144,8 +146,8 @@ function render(stats, context = {}) {
   if (stats.openAiEnabled && stats.active !== false) {
     openAiNote.hidden = false;
     openAiNote.textContent = stats.openAiErrors > 0
-      ? `OpenAI SynthID: ${stats.openAiScheduled}/${stats.openAiLimit}件を予定、${stats.openAiErrors}件でAPI未実行またはエラー。下のAPIログで原因を確認してください。`
-      : `OpenAI SynthID: ${stats.openAiScheduled}/${stats.openAiLimit}件、OpenAI由来 ${stats.openAiDetected}件。`;
+      ? t("openAiErrorsNote", `OpenAI SynthID: ${stats.openAiScheduled}/${stats.openAiLimit}件を予定、${stats.openAiErrors}件でAPI未実行またはエラー。下のAPIログで原因を確認してください。`, [stats.openAiScheduled, stats.openAiLimit, stats.openAiErrors])
+      : t("openAiCountsNote", `OpenAI SynthID: ${stats.openAiScheduled}/${stats.openAiLimit}件、OpenAI由来 ${stats.openAiDetected}件。`, [stats.openAiScheduled, stats.openAiLimit, stats.openAiDetected]);
   } else {
     openAiNote.hidden = true;
   }
@@ -153,11 +155,11 @@ function render(stats, context = {}) {
   if (stats.pageAllowed === false) {
     networkNote.hidden = false;
     networkNote.textContent = stats.urlAccessReason === "excluded"
-      ? `このページは除外ルール「${stats.matchedUrlRule || "指定ルール"}」に一致しています。設定画面で変更できます。`
-      : "許可リストにルールがあるため、このページでは解析しません。設定画面でURLを追加できます。";
+      ? t("excludedRuleHelp", `このページは除外ルール「${stats.matchedUrlRule || t("specifiedRule", "指定ルール")}」に一致しています。設定画面で変更できます。`, [stats.matchedUrlRule || t("specifiedRule", "指定ルール")])
+      : t("allowlistHelp", "許可リストにルールがあるため、このページでは解析しません。設定画面でURLを追加できます。");
   } else if (stats.unavailable > 0) {
     networkNote.hidden = false;
-    networkNote.textContent = `${stats.unavailable}件は画像配信元の制限によりファイル内情報を取得できませんでした。URL・説明文の判定は継続しています。`;
+    networkNote.textContent = t("unavailableCount", `${stats.unavailable}件は画像配信元の制限によりファイル内情報を取得できませんでした。URL・説明文の判定は継続しています。`, [stats.unavailable]);
   } else {
     networkNote.hidden = true;
   }
@@ -177,29 +179,29 @@ async function renderModelStatus() {
       localModel: thresholds.localModel,
       useGpuAcceleration: thresholds.useGpuAcceleration
     });
-    const thresholdText = `AIかも ${thresholds.localLikelyThreshold}%／AI判定 ${thresholds.localConfirmedThreshold}%`;
-    const modelText = status?.label || "選択モデル";
+    const thresholdText = t("thresholdSummary", `AIかも ${thresholds.localLikelyThreshold}%／AI判定 ${thresholds.localConfirmedThreshold}%`, [thresholds.localLikelyThreshold, thresholds.localConfirmedThreshold]);
+    const modelText = status?.label || t("selectedModel", "選択モデル");
     if (status?.ready) {
       const backendText = status.backend === "webgpu" ? "GPU / WebGPU" : "CPU / WASM";
-      const fallbackText = status.gpuFallback ? "、GPU利用不可のためCPUへ自動切替" : "";
-      note.textContent = `${modelText}: 準備済み（${backendText}${fallbackText}、${thresholdText}）`;
+      const fallbackText = status.gpuFallback ? t("gpuFallback", "、GPU利用不可のためCPUへ自動切替") : "";
+      note.textContent = t("modelReady", `${modelText}: 準備済み（${backendText}${fallbackText}、${thresholdText}）`, [modelText, backendText, fallbackText, thresholdText]);
     } else if (status?.error) {
-      note.textContent = `${modelText}: 読み込み前または利用不可`;
+      note.textContent = t("modelNotReady", `${modelText}: 読み込み前または利用不可`, [modelText]);
     } else {
       const preferredBackend = thresholds.useGpuAcceleration
-        ? "GPU優先・利用不可時はCPU"
+        ? t("preferGpu", "GPU優先・利用不可時はCPU")
         : "CPU / WASM";
-      note.textContent = `${modelText}: 初回に読み込み（${preferredBackend}、${thresholdText}）`;
+      note.textContent = t("modelLoadFirst", `${modelText}: 初回に読み込み（${preferredBackend}、${thresholdText}）`, [modelText, preferredBackend, thresholdText]);
     }
   } catch {
-    note.textContent = "ローカル画像モデル: 状態を取得できませんでした";
+    note.textContent = t("modelStatusFailed", "ローカル画像モデル: 状態を取得できませんでした");
   }
 }
 
 document.querySelector("#rescan").addEventListener("click", async () => {
   const button = document.querySelector("#rescan");
   button.disabled = true;
-  button.textContent = "確認中…";
+  button.textContent = t("checking", "確認中…");
   let response = await sendToActiveTab({ type: "rescan" });
   if (!response) {
     const connection = await connectToActivePage();
@@ -209,7 +211,7 @@ document.querySelector("#rescan").addEventListener("click", async () => {
     const connection = await connectToActivePage();
     render(connection.stats, connection);
     button.disabled = false;
-    button.textContent = "このページを再確認";
+    button.textContent = t("rescan", "このページを再確認");
   }, 650);
 });
 
@@ -242,7 +244,7 @@ document.querySelector("#app-name").textContent = manifestName;
 document.querySelector("#app-version").textContent = `v${manifest.version}`;
 document.title = `${manifestName} v${manifest.version}`;
 if (manifest.options_page && manifest.options_page !== "options/options.html") {
-  document.querySelector("#options").textContent = "管理画面";
+  document.querySelector("#options").textContent = t("adminScreen", "管理画面");
 }
 
 void chrome.storage.sync.get({ enabled: true }).then(({ enabled }) => renderPower(enabled));

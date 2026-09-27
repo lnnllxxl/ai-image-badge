@@ -1,3 +1,5 @@
+import "./i18n.js";
+const t = (key, fallback, substitutions) => globalThis.AiImageBadgeI18n?.t(key, fallback, substitutions) || fallback;
 export const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
 export const DEFAULT_LOCAL_THRESHOLDS = Object.freeze({
   likely: 0.5,
@@ -7,7 +9,7 @@ export const DEFAULT_LOCAL_THRESHOLDS = Object.freeze({
 const EXPLICIT_AI_RULES = [
   {
     id: "trained-algorithmic-media",
-    label: "Content Credentials に生成AI由来の記録があります",
+    label: t("credentialsAi", "Content Credentials に生成AI由来の記録があります"),
     patterns: [
       /trainedalgorithmicmedia/i,
       /compositewithtrainedalgorithmicmedia/i,
@@ -17,7 +19,7 @@ const EXPLICIT_AI_RULES = [
   },
   {
     id: "stable-diffusion",
-    label: "Stable Diffusion 系の生成メタデータがあります",
+    label: t("metadataStableDiffusion", "Stable Diffusion 系の生成メタデータがあります"),
     patterns: [
       /stable[\s_-]*diffusion/i,
       /automatic1111/i,
@@ -29,7 +31,7 @@ const EXPLICIT_AI_RULES = [
   },
   {
     id: "diffusion-parameters",
-    label: "拡散モデル特有の生成パラメータがあります",
+    label: t("metadataDiffusionParams", "拡散モデル特有の生成パラメータがあります"),
     allPatterns: [
       /negative prompt/i,
       /steps\s*[:=]\s*\d+/i,
@@ -38,7 +40,7 @@ const EXPLICIT_AI_RULES = [
   },
   {
     id: "openai-image",
-    label: "OpenAI の画像生成ツールを示すメタデータがあります",
+    label: t("metadataOpenAi", "OpenAI の画像生成ツールを示すメタデータがあります"),
     patterns: [
       /dall[\s·._-]*e/i,
       /gpt-image(?:-\d+)?/i,
@@ -47,17 +49,17 @@ const EXPLICIT_AI_RULES = [
   },
   {
     id: "midjourney",
-    label: "Midjourney を示すメタデータがあります",
+    label: t("metadataMidjourney", "Midjourney を示すメタデータがあります"),
     patterns: [/midjourney/i]
   },
   {
     id: "adobe-firefly",
-    label: "Adobe Firefly／生成塗りつぶしを示すメタデータがあります",
+    label: t("metadataFirefly", "Adobe Firefly／生成塗りつぶしを示すメタデータがあります"),
     patterns: [/adobe[\s_-]*firefly/i, /generative[\s_-]*fill/i]
   },
   {
     id: "other-generators",
-    label: "画像生成サービスを示すメタデータがあります",
+    label: t("metadataOther", "画像生成サービスを示すメタデータがあります"),
     patterns: [
       /black[\s_-]*forest[\s_-]*labs/i,
       /(?:model|generator)[\s:=\"']{1,12}flux(?:\.|-|\s|\d)/i,
@@ -78,13 +80,13 @@ const PROVENANCE_PATTERNS = [
 ];
 
 const LIKELY_HOSTS = [
-  [/(?:^|\.)cdn\.midjourney\.com$/i, "Midjourney の配信元です"],
-  [/(?:^|\.)oaidalleapiprodscus\.blob\.core\.windows\.net$/i, "OpenAI 画像生成の配信元です"],
-  [/(?:^|\.)images\.openai\.com$/i, "OpenAI の画像配信元です"],
-  [/(?:^|\.)image\.pollinations\.ai$/i, "画像生成サービスの配信元です"],
-  [/(?:^|\.)replicate\.delivery$/i, "生成モデル実行サービスの配信元です"],
-  [/(?:^|\.)fal\.media$/i, "生成モデル実行サービスの配信元です"],
-  [/(?:^|\.)ideogram\.ai$/i, "画像生成サービスの配信元です"]
+  [/(?:^|\.)cdn\.midjourney\.com$/i, t("hostMidjourney", "Midjourney の配信元です")],
+  [/(?:^|\.)oaidalleapiprodscus\.blob\.core\.windows\.net$/i, t("hostOpenAiGenerator", "OpenAI 画像生成の配信元です")],
+  [/(?:^|\.)images\.openai\.com$/i, t("hostOpenAi", "OpenAI の画像配信元です")],
+  [/(?:^|\.)image\.pollinations\.ai$/i, t("hostGenerator", "画像生成サービスの配信元です")],
+  [/(?:^|\.)replicate\.delivery$/i, t("hostModelService", "生成モデル実行サービスの配信元です")],
+  [/(?:^|\.)fal\.media$/i, t("hostModelService", "生成モデル実行サービスの配信元です")],
+  [/(?:^|\.)ideogram\.ai$/i, t("hostGenerator", "画像生成サービスの配信元です")]
 ];
 
 const LIKELY_PATH_PATTERN = /(?:dall[._-]?e|midjourney|stable[._-]?diffusion|ai[._-]?generated|generated[._-]?image)/i;
@@ -189,7 +191,7 @@ export function inspectUrl(rawUrl) {
         status: "likely",
         confidence: 0.78,
         reasons: [hostRule[1]],
-        evidence: ["配信元URL"],
+        evidence: [t("sourceUrl", "配信元URL")],
         advisory: true
       };
     }
@@ -198,8 +200,8 @@ export function inspectUrl(rawUrl) {
       return {
         status: "likely",
         confidence: 0.62,
-        reasons: ["URLに画像生成を示す名前が含まれます"],
-        evidence: ["URL文字列"],
+        reasons: [t("urlGeneratorName", "URLに画像生成を示す名前が含まれます")],
+        evidence: [t("urlText", "URL文字列")],
         advisory: true
       };
     }
@@ -219,8 +221,8 @@ export function inspectPageHints(hints) {
     return {
       status: "likely",
       confidence: strong.test(text) && generator.test(text) ? 0.72 : 0.58,
-      reasons: ["画像の説明文に生成AIを示す表現があります"],
-      evidence: ["ページ上の説明"]
+      reasons: [t("descriptionAi", "画像の説明文に生成AIを示す表現があります")],
+      evidence: [t("pageHintEvidence", "ページ上の説明")]
     };
   }
 
@@ -253,7 +255,7 @@ export async function inspectBytes(input, metadata = {}) {
     status: "none",
     confidence: 0,
     reasons: provenance
-      ? ["来歴情報はありますが、生成AI由来とは確認できません"]
+      ? [t("provenanceNotAi", "来歴情報はありますが、生成AI由来とは確認できません")]
       : [],
     evidence: provenance ? ["C2PA / Content Credentials"] : [],
     hasProvenance: provenance,
@@ -330,14 +332,14 @@ export function fuseDetectionResults({
     const reasons = [];
     const evidence = [];
     if (openAiProvenance.synthIdDetected) {
-      reasons.push("OpenAI公式APIがSynthIDウォーターマークを検出しました");
+      reasons.push(t("apiSynthIdDetected", "OpenAI公式APIがSynthIDウォーターマークを検出しました"));
       evidence.push("OpenAI SynthID");
     }
     if (openAiProvenance.trustedC2paDetected) {
-      reasons.push("OpenAI公式APIが信頼済みContent Credentialsを検出しました");
+      reasons.push(t("apiC2paDetected", "OpenAI公式APIが信頼済みContent Credentialsを検出しました"));
       evidence.push("OpenAI C2PA");
     }
-    if (openAiProvenance.model) reasons.push(`OpenAIモデル: ${openAiProvenance.model}`);
+    if (openAiProvenance.model) reasons.push(t("openAiModel", `OpenAIモデル: ${openAiProvenance.model}`, [openAiProvenance.model]));
     return {
       status: "confirmed",
       confidence: 0.995,
@@ -367,22 +369,22 @@ export function fuseDetectionResults({
 
   const modelReason = probability === null
     ? ""
-    : `ローカル画像モデル${pixel?.modelLabel ? `（${pixel.modelLabel}）` : ""}: 生成AIらしさ ${Math.round(probability * 100)}%`;
+    : t("localModelReason", `ローカル画像モデル${pixel?.modelLabel ? `（${pixel.modelLabel}）` : ""}: 生成AIらしさ ${Math.round(probability * 100)}%`, [pixel?.modelLabel ? ` (${pixel.modelLabel})` : "", Math.round(probability * 100)]);
   const frequencyStrong = anomaly !== null && anomaly >= 0.55;
   const contextSupport = context.status === "likely";
   const contextStrong = labelContext.status === "likely";
 
   if (probability !== null && probability >= thresholds.confirmed && (frequencyStrong || contextSupport)) {
     const supportingReasons = frequencyStrong
-      ? ["周波数・ノイズ解析でも生成画像に似た特徴を検出しました", ...(frequency.reasons || [])]
+      ? [t("frequencySupport", "周波数・ノイズ解析でも生成画像に似た特徴を検出しました"), ...(frequency.reasons || [])]
       : context.reasons;
     return {
       status: "confirmed",
       confidence: Math.max(0.9, probability),
       reasons: mergeUnique(modelReason, supportingReasons),
       evidence: mergeUnique(
-        "ローカル画像モデル",
-        frequencyStrong ? "周波数・ノイズ分析" : context.evidence
+        t("localModel", "ローカル画像モデル"),
+        frequencyStrong ? t("frequencyEvidence", "周波数・ノイズ分析") : context.evidence
       ),
       basis: "multiple-signals",
       c2paDetected,
@@ -394,8 +396,8 @@ export function fuseDetectionResults({
     return {
       status: "likely",
       confidence: probability,
-      reasons: mergeUnique(modelReason, "周波数・ノイズ解析が画像モデルを補強しました", frequency.reasons),
-      evidence: ["ローカル画像モデル", "周波数・ノイズ分析"],
+      reasons: mergeUnique(modelReason, t("frequencyReinforced", "周波数・ノイズ解析が画像モデルを補強しました"), frequency.reasons),
+      evidence: [t("localModel", "ローカル画像モデル"), t("frequencyEvidence", "周波数・ノイズ分析")],
       basis: "pixel-plus-frequency",
       c2paDetected,
       analysis
@@ -407,7 +409,7 @@ export function fuseDetectionResults({
       status: "likely",
       confidence: probability,
       reasons: mergeUnique(modelReason),
-      evidence: ["ローカル画像モデル"],
+      evidence: [t("localModel", "ローカル画像モデル")],
       basis: "pixel-model",
       c2paDetected,
       analysis
@@ -429,7 +431,7 @@ export function fuseDetectionResults({
     confidence: 0,
     reasons: mergeUnique(
       byteResult?.reasons,
-      disagreement ? "画像モデルとURL／説明文の手がかりが一致しないためAIかもとして表示します" : null
+      disagreement ? t("modelDisagreement", "画像モデルとURL／説明文の手がかりが一致しないためAIかもとして表示します") : null
     ),
     evidence: mergeUnique(byteResult?.evidence),
     hasProvenance: Boolean(byteResult?.hasProvenance),

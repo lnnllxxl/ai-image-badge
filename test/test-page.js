@@ -1,8 +1,10 @@
+const t = (key, fallback, substitutions) => globalThis.AiImageBadgeI18n?.t(key, fallback, substitutions) || fallback;
+globalThis.AiImageBadgeI18n?.localizeDocument();
 const manifest = chrome.runtime.getManifest();
-const appName = manifest.name.replace(/ 教育・管理者版$/, "");
+const appName = t("extensionName", "AI IMAGE BADGE");
 document.querySelector("#app-name").textContent = appName;
 document.querySelector("#app-version").textContent = `v${manifest.version}`;
-document.title = `${appName} テストページ v${manifest.version}`;
+document.title = t("testTitle", `${appName} テストページ v${manifest.version}`, [appName, manifest.version]);
 
 const testPageUrl = chrome.runtime.getURL("test/test.html");
 
@@ -16,7 +18,7 @@ globalThis.ChatGptAiBadgeTestFixtures = Object.freeze({
       status: "confirmed",
       confidence: 1,
       reasons: [
-        "操作テスト用の模擬OpenAI SynthID検出です。実際のOpenAI APIは呼び出していません。"
+        t("demoReason", "操作テスト用の模擬OpenAI SynthID検出です。実際のOpenAI APIは呼び出していません。")
       ],
       evidence: ["test-fixture:openai-synthid"],
       basis: "openai-provenance",

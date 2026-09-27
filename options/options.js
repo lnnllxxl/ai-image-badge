@@ -1,3 +1,5 @@
+const t = (key, fallback, substitutions) => globalThis.AiImageBadgeI18n?.t(key, fallback, substitutions) || fallback;
+globalThis.AiImageBadgeI18n?.localizeDocument();
 const DEFAULTS = {
   enabled: true,
   urlAllowList: "",
@@ -24,14 +26,14 @@ const BUILTIN_LOCAL_MODELS = ["community", "distilled", "capcheck"];
 const CUSTOM_LOCAL_MODELS = [
   { id: "community-forensics-custom", fallback: "Community Forensics Custom" },
   { id: "resnet18-custom", fallback: "ResNet-18 Custom" },
-  { id: "chatgpt-custom", fallback: "旧カスタムモデル" }
+  { id: "chatgpt-custom", fallback: t("legacyCustom", "旧カスタムモデル") }
 ];
 const availableLocalModels = new Set(BUILTIN_LOCAL_MODELS);
 const manifest = chrome.runtime.getManifest();
-const appName = manifest.name.replace(/ 教育・管理者版$/, "");
+const appName = t("extensionName", "AI IMAGE BADGE");
 document.querySelector("#app-name").textContent = appName;
 document.querySelector("#app-version").textContent = `v${manifest.version}`;
-document.title = `${appName} の設定 v${manifest.version}`;
+document.title = t("optionsTitle", `${appName} の設定 v${manifest.version}`, [appName, manifest.version]);
 
 function clampThreshold(value, fallback) {
   const number = Number(value);
@@ -79,11 +81,11 @@ async function loadAvailableLocalModels() {
       if (custom?.weights) {
         availableLocalModels.add(customModel.id);
         option.disabled = false;
-        option.textContent = `${custom.label || customModel.fallback}（教育モデル）`;
+        option.textContent = t("customModelLoaded", `${custom.label || customModel.fallback}（教育モデル）`, [custom.label || customModel.fallback]);
       } else {
         availableLocalModels.delete(customModel.id);
         option.disabled = true;
-        option.textContent = `${customModel.fallback}（学習モデル未導入）`;
+        option.textContent = t("customModelMissing", `${customModel.fallback}（学習モデル未導入）`, [customModel.fallback]);
       }
     }
   } catch {
@@ -91,7 +93,7 @@ async function loadAvailableLocalModels() {
       const option = form.elements.localModel.querySelector(`option[value="${customModel.id}"]`);
       availableLocalModels.delete(customModel.id);
       option.disabled = true;
-      option.textContent = `${customModel.fallback}（学習モデル未導入）`;
+      option.textContent = t("customModelMissing", `${customModel.fallback}（学習モデル未導入）`, [customModel.fallback]);
     }
   }
 }
@@ -152,7 +154,7 @@ form.addEventListener("submit", async (event) => {
     chrome.storage.local.set({ openAiApiKey: form.elements.openAiApiKey.value.trim() })
   ]);
   fill(values);
-  void flashSaved("保存しました");
+  void flashSaved(t("saved", "保存しました"));
 });
 
 document.querySelector("#reset").addEventListener("click", async () => {
@@ -162,14 +164,14 @@ document.querySelector("#reset").addEventListener("click", async () => {
   ]);
   fill(DEFAULTS);
   form.elements.openAiApiKey.value = "";
-  void flashSaved("初期設定に戻しました");
+  void flashSaved(t("resetSaved", "初期設定に戻しました"));
 });
 
 document.querySelector("#toggle-key").addEventListener("click", (event) => {
   const input = form.elements.openAiApiKey;
   const show = input.type === "password";
   input.type = show ? "text" : "password";
-  event.currentTarget.textContent = show ? "隠す" : "表示";
+  event.currentTarget.textContent = show ? t("hide", "隠す") : t("show", "表示");
 });
 
 form.elements.localLikelyThreshold.addEventListener("input", syncThresholdLimits);

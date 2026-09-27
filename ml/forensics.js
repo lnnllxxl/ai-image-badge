@@ -1,3 +1,5 @@
+import "../i18n.js";
+const t = (key, fallback, substitutions) => globalThis.AiImageBadgeI18n?.t(key, fallback, substitutions) || fallback;
 const SIZE = 64;
 
 const clamp01 = (value) => Math.min(1, Math.max(0, value));
@@ -172,9 +174,9 @@ export function analyzeRgbaPixels(data, width, height) {
   const blockScore = clamp01((residual.boundaryRatio - 1.25) / 2.25);
   const anomalyScore = clamp01(0.5 * spectralPeak + 0.35 * periodicityScore + 0.15 * blockScore);
   const reasons = [];
-  if (spectralPeak >= 0.55) reasons.push("周波数分布に周期的なピークがあります");
-  if (periodicityScore >= 0.55) reasons.push("微細ノイズに反復パターンがあります");
-  if (blockScore >= 0.6) reasons.push("8ピクセル境界の差が目立ちます");
+  if (spectralPeak >= 0.55) reasons.push(t("spectralPeak", "周波数分布に周期的なピークがあります"));
+  if (periodicityScore >= 0.55) reasons.push(t("repeatedNoise", "微細ノイズに反復パターンがあります"));
+  if (blockScore >= 0.6) reasons.push(t("pixelBoundaries", "8ピクセル境界の差が目立ちます"));
   return {
     anomalyScore,
     reasons,

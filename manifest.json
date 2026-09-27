@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "AI IMAGE BADGE",
-  "version": "0.12.0",
-  "description": "OpenAI SynthID、来歴、切替可能な3つのローカル画像モデル、周波数・ノイズ特徴を統合し、生成AI画像に判定理由つきのバッジを表示します。",
+  "version": "0.13.1",
+  "description": "__MSG_extensionDescription__",
   "minimum_chrome_version": "116",
   "permissions": [
     "scripting",
@@ -44,6 +44,7 @@
         "https://*/*"
       ],
       "js": [
+        "i18n.js",
         "editions/release.js",
         "url-rules.js",
         "content/metadata-fallback.js",
@@ -53,5 +54,6 @@
       "run_at": "document_idle",
       "all_frames": true
     }
-  ]
+  ],
+  "default_locale": "en"
 }

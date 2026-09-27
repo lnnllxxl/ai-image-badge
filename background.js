@@ -1,3 +1,5 @@
+import "./i18n.js";
+const t = (key, fallback, substitutions) => globalThis.AiImageBadgeI18n?.t(key, fallback, substitutions) || fallback;
 import {
   MAX_IMAGE_BYTES,
   fuseDetectionResults,
@@ -168,7 +170,7 @@ async function ensureOffscreen() {
   creatingOffscreen = chrome.offscreen.createDocument({
     url: "ml/offscreen.html",
     reasons: ["WORKERS"],
-    justification: "画像分類モデルを端末内で実行し、全タブで1つのモデルを共有するため。"
+    justification: t("offscreenJustification", "画像分類モデルを端末内で実行し、全タブで1つのモデルを共有するため。")
   }).catch((error) => {
     if (!String(error).includes("Only a single offscreen")) throw error;
   }).finally(() => {

@@ -1,3 +1,5 @@
+import "../i18n.js";
+const t = (key, fallback, substitutions) => globalThis.AiImageBadgeI18n?.t(key, fallback, substitutions) || fallback;
 /*
  * Community model preprocessing/calibration is derived from
  * agentatwork/local-ai-image-detector (MIT). See third_party notices.
@@ -64,7 +66,7 @@ function canUseWebGpu() {
 }
 
 function errorMessage(error) {
-  return String(error?.message || error || "GPUを初期化できませんでした").replace(/\s+/g, " ").slice(0, 240);
+  return String(error?.message || error || t("gpuInitFailed", "GPUを初期化できませんでした")).replace(/\s+/g, " ").slice(0, 240);
 }
 
 async function releaseSession(modelId) {
@@ -130,7 +132,7 @@ export async function loadModel(modelId = "community", useGpuAcceleration = fals
     const webGpuAvailable = canUseWebGpu();
     const providers = gpuRequested && webGpuAvailable ? ["webgpu", "wasm"] : ["wasm"];
     if (gpuRequested && !webGpuAvailable) {
-      gpuErrors.set(id, "このChrome環境ではWebGPUを利用できません");
+      gpuErrors.set(id, t("webGpuUnavailable", "このChrome環境ではWebGPUを利用できません"));
     } else if (!gpuRequested) {
       gpuErrors.delete(id);
     }

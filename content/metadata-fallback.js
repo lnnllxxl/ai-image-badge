@@ -1,4 +1,5 @@
 (() => {
+  const t = (key, fallback, substitutions) => globalThis.AiImageBadgeI18n?.t(key, fallback, substitutions) || fallback;
   const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
 
   const C2PA_PATTERNS = [
@@ -36,12 +37,12 @@
       status: aiSourceDetected ? "confirmed" : "none",
       confidence: aiSourceDetected ? 0.98 : 0,
       reasons: aiSourceDetected
-        ? ["Content Credentials に生成AI由来の記録があります"]
-        : ["C2PA / Content Credentials を検出しました"],
+        ? [t("credentialsAi", "Content Credentials に生成AI由来の記録があります")]
+        : [t("c2paFound", "C2PA / Content Credentials を検出しました")],
       evidence: unique([
         aiSourceDetected ? "trained-algorithmic-media" : null,
         "C2PA / Content Credentials",
-        "ページ内画像から再取得"
+        t("pageImageRetry", "ページ内画像から再取得")
       ]),
       hasProvenance: true,
       c2paDetected: true,

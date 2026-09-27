@@ -1,0 +1,899 @@
+{
+  "activeImageCount": {
+    "message": "$count$件の画像があるページで動作中",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "adminScreen": {
+    "message": "管理画面"
+  },
+  "advisoryPrefix": {
+    "message": "参考情報："
+  },
+  "aiHeading": {
+    "message": "AI画像と判定しました"
+  },
+  "allowlistHelp": {
+    "message": "許可リストにルールがあるため、このページでは解析しません。設定画面でURLを追加できます。"
+  },
+  "apiC2paDetected": {
+    "message": "OpenAI公式APIが信頼済みContent Credentialsを検出しました"
+  },
+  "apiErrorDetail": {
+    "message": "OpenAI SynthID検証エラー: $arg1$",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "apiNoSignalWarning": {
+    "message": "OpenAI SynthID検証: 対応する信号は検出されませんでした。SNSの変換・縮小・再圧縮で検出できない場合があります。"
+  },
+  "apiNotRunDetail": {
+    "message": "OpenAI SynthID検証は未実行です: $arg1$",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "apiSynthIdDetected": {
+    "message": "OpenAI公式APIがSynthIDウォーターマークを検出しました"
+  },
+  "badgeC2pa": {
+    "message": "AI【C2PA】"
+  },
+  "badgeMaybe": {
+    "message": "AIかも"
+  },
+  "badgeMaybeC2pa": {
+    "message": "AIかも【C2PA】"
+  },
+  "badgeModel": {
+    "message": "AI【モデル判定】"
+  },
+  "badgeNonAi": {
+    "message": "非生成かも"
+  },
+  "badgeSynthId": {
+    "message": "AI【SynthID】"
+  },
+  "c2paFound": {
+    "message": "C2PA / Content Credentials を検出しました"
+  },
+  "c2paHeading": {
+    "message": "AI画像と判定しました（C2PAに生成AI由来の記録を検出）"
+  },
+  "c2paUnconfirmed": {
+    "message": "C2PA（生成AI由来の記録を未確認）"
+  },
+  "checking": {
+    "message": "確認中…"
+  },
+  "checkPageLimit": {
+    "message": "OpenAI SynthID検証は1ページあたりの上限により未実行です。"
+  },
+  "combinedAssessment": {
+    "message": "総合判定"
+  },
+  "conflictingEvidence": {
+    "message": "複数の根拠が不一致"
+  },
+  "credentialsAi": {
+    "message": "Content Credentials に生成AI由来の記録があります"
+  },
+  "customModelLoaded": {
+    "message": "$model$（教育モデル）",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      }
+    }
+  },
+  "customModelMissing": {
+    "message": "$model$（学習モデル未導入）",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      }
+    }
+  },
+  "demoReason": {
+    "message": "操作テスト用の模擬OpenAI SynthID検出です。実際のOpenAI APIは呼び出していません。"
+  },
+  "descriptionAi": {
+    "message": "画像の説明文に生成AIを示す表現があります"
+  },
+  "disclaimer": {
+    "message": "本判定は参考情報です。画像の真贋、著作権、制作者や掲載者への評価を確定するものではありません。"
+  },
+  "errApi500": {
+    "message": "OpenAI APIで一時的な内部エラーが発生しました。"
+  },
+  "errApi502": {
+    "message": "OpenAI APIの接続先で一時的なエラーが発生しました。"
+  },
+  "errApi503": {
+    "message": "OpenAI APIが一時的に利用できません。"
+  },
+  "errApiHttp": {
+    "message": "OpenAI APIエラー（HTTP $status$）。",
+    "placeholders": {
+      "status": {
+        "content": "$1"
+      }
+    }
+  },
+  "errApiTooLarge": {
+    "message": "OpenAI APIへ送る画像が大きすぎます。"
+  },
+  "errApiUnavailable": {
+    "message": "Content Provenance APIを利用できません。"
+  },
+  "errAuthImage": {
+    "message": "認証なしで取得できない画像のため、プライバシー保護のためOpenAIへ送信しませんでした。"
+  },
+  "errBadImage": {
+    "message": "OpenAI APIが画像を受け付けませんでした。"
+  },
+  "errCheck": {
+    "message": "OpenAI検証を完了できませんでした。"
+  },
+  "errFile": {
+    "message": "OpenAI検証へ送る画像ファイルが無効です。"
+  },
+  "errForbidden": {
+    "message": "Content Provenance APIを利用する権限がありません。"
+  },
+  "errFormat": {
+    "message": "OpenAI検証に対応していない画像形式です。"
+  },
+  "errImageHttp": {
+    "message": "対象画像の取得に失敗しました（HTTP $arg1$）。",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "errImageSize": {
+    "message": "画像がOpenAI検証のサイズ上限を超えています。"
+  },
+  "errInvalidKey": {
+    "message": "OpenAI APIキーが無効です。"
+  },
+  "errMissingKey": {
+    "message": "OpenAI APIキーが未設定です。"
+  },
+  "errNetwork": {
+    "message": "OpenAI APIへ接続できませんでした。"
+  },
+  "errQuota": {
+    "message": "OpenAI APIの利用上限に達しました。"
+  },
+  "errResponse": {
+    "message": "OpenAI APIから想定外の応答が返りました。"
+  },
+  "errTimeout": {
+    "message": "OpenAI APIがタイムアウトしました。"
+  },
+  "excludedPage": {
+    "message": "URL除外リストにより停止中"
+  },
+  "excludedRuleHelp": {
+    "message": "このページは除外ルール「$rule$」に一致しています。設定画面で変更できます。",
+    "placeholders": {
+      "rule": {
+        "content": "$1"
+      }
+    }
+  },
+  "extensionDescription": {
+    "message": "OpenAI SynthID、来歴、切替可能な3つのローカル画像モデル、周波数・ノイズ特徴を統合し、生成AI画像に判定理由つきのバッジを表示します。"
+  },
+  "extensionName": {
+    "message": "AI IMAGE BADGE"
+  },
+  "frequencyEvidence": {
+    "message": "周波数・ノイズ分析"
+  },
+  "frequencyReinforced": {
+    "message": "周波数・ノイズ解析が画像モデルを補強しました"
+  },
+  "frequencySupport": {
+    "message": "周波数・ノイズ解析でも生成画像に似た特徴を検出しました"
+  },
+  "generatedMetadata": {
+    "message": "生成AIメタデータ"
+  },
+  "gpuFallback": {
+    "message": "、GPU利用不可のためCPUへ自動切替"
+  },
+  "gpuInitFailed": {
+    "message": "GPUを初期化できませんでした"
+  },
+  "hide": {
+    "message": "隠す"
+  },
+  "hostGenerator": {
+    "message": "画像生成サービスの配信元です"
+  },
+  "hostMidjourney": {
+    "message": "Midjourney の配信元です"
+  },
+  "hostModelService": {
+    "message": "生成モデル実行サービスの配信元です"
+  },
+  "hostOpenAi": {
+    "message": "OpenAI の画像配信元です"
+  },
+  "hostOpenAiGenerator": {
+    "message": "OpenAI 画像生成の配信元です"
+  },
+  "image": {
+    "message": "画像"
+  },
+  "imageUnavailable": {
+    "message": "画像取得不能（判定未完了）"
+  },
+  "imageUrlFailed": {
+    "message": "画像URLを取得できません"
+  },
+  "insufficientReason": {
+    "message": "生成AIと判断するのに十分な根拠は見つかりませんでした。"
+  },
+  "legacyCustom": {
+    "message": "旧カスタムモデル"
+  },
+  "localModel": {
+    "message": "ローカル画像モデル"
+  },
+  "localModelReason": {
+    "message": "ローカル画像モデル$arg1$: 生成AIらしさ $arg2$%",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      },
+      "arg2": {
+        "content": "$2"
+      }
+    }
+  },
+  "logC2pa": {
+    "message": "信頼済みC2PAを検出しました。"
+  },
+  "logCode": {
+    "message": " / コード: $code$",
+    "placeholders": {
+      "code": {
+        "content": "$1"
+      }
+    }
+  },
+  "logNoSignal": {
+    "message": "OpenAI由来の信号は検出されませんでした。"
+  },
+  "logNotRun": {
+    "message": "OpenAI検証は実行されませんでした。"
+  },
+  "logSource": {
+    "message": "対象: $source$$code$",
+    "placeholders": {
+      "source": {
+        "content": "$1"
+      },
+      "code": {
+        "content": "$2"
+      }
+    }
+  },
+  "logSynthId": {
+    "message": "OpenAI SynthIDを検出しました。"
+  },
+  "maybeHeading": {
+    "message": "AIかどうかの判定が難しい画像です"
+  },
+  "metadataDiffusionParams": {
+    "message": "拡散モデル特有の生成パラメータがあります"
+  },
+  "metadataFirefly": {
+    "message": "Adobe Firefly／生成塗りつぶしを示すメタデータがあります"
+  },
+  "metadataMidjourney": {
+    "message": "Midjourney を示すメタデータがあります"
+  },
+  "metadataOpenAi": {
+    "message": "OpenAI の画像生成ツールを示すメタデータがあります"
+  },
+  "metadataOther": {
+    "message": "画像生成サービスを示すメタデータがあります"
+  },
+  "metadataStableDiffusion": {
+    "message": "Stable Diffusion 系の生成メタデータがあります"
+  },
+  "methodAux": {
+    "message": "$model$＋補助解析",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      }
+    }
+  },
+  "methodFrequency": {
+    "message": "$model$＋周波数・ノイズ解析",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      }
+    }
+  },
+  "methodPrefix": {
+    "message": "判定方式："
+  },
+  "modelDisagreement": {
+    "message": "画像モデルとURL／説明文の手がかりが一致しないためAIかもとして表示します"
+  },
+  "modelLoadFirst": {
+    "message": "$model$: 初回に読み込み（$backend$、$thresholds$）",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      },
+      "backend": {
+        "content": "$2"
+      },
+      "thresholds": {
+        "content": "$3"
+      }
+    }
+  },
+  "modelNotReady": {
+    "message": "$model$: 読み込み前または利用不可",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      }
+    }
+  },
+  "modelReady": {
+    "message": "$model$: 準備済み（$backend$$fallback$、$thresholds$）",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      },
+      "backend": {
+        "content": "$2"
+      },
+      "fallback": {
+        "content": "$3"
+      },
+      "thresholds": {
+        "content": "$4"
+      }
+    }
+  },
+  "modelScore": {
+    "message": "$model$／生成AIらしさ $score$%",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      },
+      "score": {
+        "content": "$2"
+      }
+    }
+  },
+  "modelStatusFailed": {
+    "message": "ローカル画像モデル: 状態を取得できませんでした"
+  },
+  "noAiMethod": {
+    "message": "総合判定（生成AIの根拠なし）"
+  },
+  "noApiLogs": {
+    "message": "まだAPI結果はありません。画像が表示領域に近づくと検証します。"
+  },
+  "nonAiHeading": {
+    "message": "非生成の可能性が高い画像です"
+  },
+  "notAllowedPage": {
+    "message": "URL許可リストの対象外です"
+  },
+  "noticePrefix": {
+    "message": "注意："
+  },
+  "officialApi": {
+    "message": "OpenAI公式Content Provenance API"
+  },
+  "offscreenJustification": {
+    "message": "画像分類モデルを端末内で実行し、全タブで1つのモデルを共有するため。"
+  },
+  "openAiCountsNote": {
+    "message": "OpenAI SynthID: $checks$/$limit$件、OpenAI由来 $detected$件。",
+    "placeholders": {
+      "checks": {
+        "content": "$1"
+      },
+      "limit": {
+        "content": "$2"
+      },
+      "detected": {
+        "content": "$3"
+      }
+    }
+  },
+  "openAiErrorsNote": {
+    "message": "OpenAI SynthID: $scheduled$/$limit$件を予定、$errors$件でAPI未実行またはエラー。下のAPIログで原因を確認してください。",
+    "placeholders": {
+      "scheduled": {
+        "content": "$1"
+      },
+      "limit": {
+        "content": "$2"
+      },
+      "errors": {
+        "content": "$3"
+      }
+    }
+  },
+  "openAiModel": {
+    "message": "OpenAIモデル: $arg1$",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "optionsTitle": {
+    "message": "$name$ の設定 v$version$",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      },
+      "version": {
+        "content": "$2"
+      }
+    }
+  },
+  "pageConnected": {
+    "message": "このページへ接続しました"
+  },
+  "pageDescription": {
+    "message": "ページ説明"
+  },
+  "pageHintEvidence": {
+    "message": "ページ上の説明"
+  },
+  "pageImageRetry": {
+    "message": "ページ内画像から再取得"
+  },
+  "paused": {
+    "message": "設定で一時停止中"
+  },
+  "pixelBoundaries": {
+    "message": "8ピクセル境界の差が目立ちます"
+  },
+  "powerOff": {
+    "message": "オフ：バッジを表示しません"
+  },
+  "powerOn": {
+    "message": "オン：画像を確認します"
+  },
+  "preferGpu": {
+    "message": "GPU優先・利用不可時はCPU"
+  },
+  "protectedPage": {
+    "message": "このページはChromeの保護対象です"
+  },
+  "protectedPageHelp": {
+    "message": "通常の http:// または https:// ページを開いてください。chrome://、新しいタブ、設定画面などでは動作しません。"
+  },
+  "provenanceNotAi": {
+    "message": "来歴情報はありますが、生成AI由来とは確認できません"
+  },
+  "reloadPageHelp": {
+    "message": "ページを一度再読み込みしてから、もう一度このポップアップを開いてください。"
+  },
+  "repeatedNoise": {
+    "message": "微細ノイズに反復パターンがあります"
+  },
+  "rescan": {
+    "message": "このページを再確認"
+  },
+  "resetSaved": {
+    "message": "初期設定に戻しました"
+  },
+  "resultHeading": {
+    "message": "画像の判定結果"
+  },
+  "saved": {
+    "message": "保存しました"
+  },
+  "scorePrefix": {
+    "message": "ローカルモデルスコア："
+  },
+  "scoreUnavailable": {
+    "message": "未取得（ローカルモデル未実行または解析不能）"
+  },
+  "selectedModel": {
+    "message": "選択モデル"
+  },
+  "show": {
+    "message": "表示"
+  },
+  "sourceUrl": {
+    "message": "配信元URL"
+  },
+  "specifiedRule": {
+    "message": "指定ルール"
+  },
+  "spectralPeak": {
+    "message": "周波数分布に周期的なピークがあります"
+  },
+  "storeBlocked": {
+    "message": "Chromeウェブストアでは動作できません"
+  },
+  "storeBlockedHelp": {
+    "message": "Chromeの保護仕様により、拡張機能はウェブストアのページへ処理を追加できません。別のWebサイトでお試しください。"
+  },
+  "synthIdC2paHeading": {
+    "message": "AI画像と判定しました（SynthIDと信頼済みC2PAを検出）"
+  },
+  "synthIdHeading": {
+    "message": "AI画像と判定しました（SynthIDを検出）"
+  },
+  "synthIdMethod": {
+    "message": "OpenAI SynthID（OpenAI公式Content Provenance API）"
+  },
+  "tabConnectionFailed": {
+    "message": "このタブへ接続できませんでした"
+  },
+  "testTitle": {
+    "message": "$name$ テストページ v$version$",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      },
+      "version": {
+        "content": "$2"
+      }
+    }
+  },
+  "thresholdSummary": {
+    "message": "AIかも $likely$%／AI判定 $confirmed$%",
+    "placeholders": {
+      "likely": {
+        "content": "$1"
+      },
+      "confirmed": {
+        "content": "$2"
+      }
+    }
+  },
+  "trustedC2paMethod": {
+    "message": "信頼済みC2PA（OpenAI公式Content Provenance API）"
+  },
+  "ui001": {
+    "message": "ページを確認しています…"
+  },
+  "ui002": {
+    "message": "URLを取得しています…"
+  },
+  "ui003": {
+    "message": "バッジ表示"
+  },
+  "ui004": {
+    "message": "状態を確認中…"
+  },
+  "ui005": {
+    "message": "AI判定"
+  },
+  "ui006": {
+    "message": "確認済み"
+  },
+  "ui007": {
+    "message": "はOpenAI SynthID、生成AI由来のC2PA、またはモデル等による強い判定です。"
+  },
+  "ui008": {
+    "message": "は根拠が限定的・不一致・取得不能の結果、"
+  },
+  "ui009": {
+    "message": "は生成AIの根拠が見つからない結果です。"
+  },
+  "ui010": {
+    "message": "ローカル画像モデル: 状態を確認中…"
+  },
+  "ui011": {
+    "message": "OpenAI APIログ（現在のページ）"
+  },
+  "ui012": {
+    "message": "画像やAPIキーはログに保存しません。ページの再読み込みまたは再確認で消去されます。"
+  },
+  "ui013": {
+    "message": "設定"
+  },
+  "ui014": {
+    "message": "テストページを開く"
+  },
+  "ui015": {
+    "message": "バッジ表示のオン・オフ"
+  },
+  "ui016": {
+    "message": "検出結果"
+  },
+  "ui017": {
+    "message": "AI IMAGE BADGE の設定"
+  },
+  "ui018": {
+    "message": "通常の解析は端末内で行います。OpenAI SynthID検証を有効にした場合だけ、対象画像をOpenAIのContent Provenance APIへ送信します。"
+  },
+  "ui019": {
+    "message": "バッジを表示する"
+  },
+  "ui020": {
+    "message": "URLルールで許可された対象ページの検出を有効にします。"
+  },
+  "ui021": {
+    "message": "URL許可リスト"
+  },
+  "ui022": {
+    "message": "1行に1ルール。空欄ならすべてのHTTP/HTTPSページを許可します。入力すると一致したページだけで動作します。"
+  },
+  "ui023": {
+    "message": "URL除外リスト"
+  },
+  "ui024": {
+    "message": "1行に1ルール。許可リストより優先されます。ドメインだけの指定はサブドメインにも一致し、*をワイルドカードとして使えます。"
+  },
+  "ui025": {
+    "message": "「AIかも」も表示する"
+  },
+  "ui026": {
+    "message": "根拠が限定的、不一致、画像取得不能、または生成由来を確認できないC2PA画像にも表示します。"
+  },
+  "ui027": {
+    "message": "「非生成かも」も表示する"
+  },
+  "ui028": {
+    "message": "生成AIを示す情報が見つからなかった画像にも灰色のバッジを表示します。"
+  },
+  "ui029": {
+    "message": "ページ上の説明文を使う"
+  },
+  "ui030": {
+    "message": "alt、title、キャプションに「AI生成」などの表現があるか確認します。"
+  },
+  "ui031": {
+    "message": "ローカル画像モデルを使う"
+  },
+  "ui032": {
+    "message": "選択したViTモデルで画像のピクセルを端末内解析します。初回は同梱モデルの読み込みに時間がかかります。"
+  },
+  "ui033": {
+    "message": "ローカル判定モデル"
+  },
+  "ui034": {
+    "message": "モデルごとに学習データと出力傾向が異なります。変更して保存すると、開いているページを選択モデルで再判定します。"
+  },
+  "ui035": {
+    "message": "Community Forensics ViT（標準・87MB）"
+  },
+  "ui036": {
+    "message": "Distilled ViT Q4（軽量・11MB）"
+  },
+  "ui037": {
+    "message": "CapCheck ViT-Base Q4（CIFAKE・57MB）"
+  },
+  "ui038": {
+    "message": "Community Forensics Custom（学習モデル未導入）"
+  },
+  "ui039": {
+    "message": "ResNet-18 Custom（学習モデル未導入）"
+  },
+  "ui040": {
+    "message": "旧カスタムモデル（学習モデル未導入）"
+  },
+  "ui041": {
+    "message": "グラフィックボード（GPU）を使用する"
+  },
+  "ui042": {
+    "message": "ローカル画像モデルをWebGPUで高速化します。利用できない環境やGPU実行エラー時は、自動的にCPU（WASM）へ切り替えます。既定はオフです。"
+  },
+  "ui043": {
+    "message": "「AIかも」のローカル判定しきい値"
+  },
+  "ui044": {
+    "message": "モデルの生成AIらしさがこの値以上なら「AIかも」にします。低くすると検出が増えますが、誤判定も増えやすくなります。"
+  },
+  "ui045": {
+    "message": "「AI【モデル判定】」の強いローカル判定しきい値"
+  },
+  "ui046": {
+    "message": "この値以上かつ周波数解析・URL・説明文の根拠が一致した場合に「AI【モデル判定】」にします。「AIかも」のしきい値未満には設定できません。"
+  },
+  "ui047": {
+    "message": "周波数・ノイズ解析を使う"
+  },
+  "ui048": {
+    "message": "周期性、残差ノイズ、8px境界を補助根拠にします。この解析だけでAIとは判定しません。"
+  },
+  "ui049": {
+    "message": "OpenAI SynthID検証を使う（最優先）"
+  },
+  "ui050": {
+    "message": "画像をOpenAI公式APIへアップロードし、SynthIDを最優先、次に信頼済みC2PAを確認します。画像取得時に認証用Cookieは送らず、ログインが必要な画像はOpenAIへ送信しません。SNSで変換・圧縮された画像は検出できない場合があります。API利用料・送信データにはOpenAIの条件が適用されます。既定はオフです。"
+  },
+  "ui051": {
+    "message": "OpenAI APIキー"
+  },
+  "ui052": {
+    "message": "この端末のChromeローカル領域だけに保存し、同期しません。ただし拡張機能ストレージは端末上で暗号化されないため、Chromeプロフィールを読み取れるプロセスから参照される可能性があります。本拡張専用のOpenAIプロジェクトとAPIキーを作成し、プロジェクトの利用上限を低めに設定してください。"
+  },
+  "ui053": {
+    "message": "1ページあたりのOpenAI検証上限"
+  },
+  "ui054": {
+    "message": "重複URLは1回として数えます。上限を超えた画像はローカル解析だけ行います。"
+  },
+  "ui055": {
+    "message": "件"
+  },
+  "ui056": {
+    "message": "CSS背景画像も確認する"
+  },
+  "ui057": {
+    "message": "ページによっては表示が少し重くなることがあります。"
+  },
+  "ui058": {
+    "message": "確認する画像の最小サイズ"
+  },
+  "ui059": {
+    "message": "小さなアイコンを除外します。"
+  },
+  "ui060": {
+    "message": "保存"
+  },
+  "ui061": {
+    "message": "初期設定に戻す"
+  },
+  "ui062": {
+    "message": "判定について"
+  },
+  "ui063": {
+    "message": "URLルールは閲覧中のページURLへ適用され、画像配信元URLには適用されません。除外リストが常に優先されます。同梱3モデルと追加学習モデルの確率は同じ尺度ではなく、画像の編集・圧縮・未知の生成器で結果が変わります。"
+  },
+  "ui064": {
+    "message": "AI可能性判定しきい値"
+  },
+  "ui065": {
+    "message": "強いAI判定しきい値"
+  },
+  "ui066": {
+    "message": "OpenAI APIキー（暗号化されずローカル保存）"
+  },
+  "ui067": {
+    "message": "OpenAI検証上限"
+  },
+  "ui068": {
+    "message": "最小幅"
+  },
+  "ui069": {
+    "message": "最小高さ"
+  },
+  "ui070": {
+    "message": "AI IMAGE BADGE テストページ"
+  },
+  "ui071": {
+    "message": "動作テスト"
+  },
+  "ui072": {
+    "message": "拡張機能のポップアップから開いたテストページです。テスト画像は800×500pxです。画像右上のバッジを押すと、判定理由が表示されます。"
+  },
+  "ui073": {
+    "message": "AI【SynthID】バッジが付くデモ画像"
+  },
+  "ui074": {
+    "message": "バッジ表示と詳細バルーンの操作確認用です。模擬判定のためOpenAI APIは呼び出さず、料金も発生しません。"
+  },
+  "ui075": {
+    "message": "AI【モデル判定】バッジが付く画像"
+  },
+  "ui076": {
+    "message": "画像ファイル内に"
+  },
+  "ui077": {
+    "message": "の生成メタデータがあります。クリックすると判定方式を確認できます。"
+  },
+  "ui078": {
+    "message": "AI【C2PA】バッジが付く画像"
+  },
+  "ui079": {
+    "message": "のテスト用記録があります。"
+  },
+  "ui080": {
+    "message": "AIかも【C2PA】バッジが付く画像"
+  },
+  "ui081": {
+    "message": "C2PAはありますが、生成AI由来を示す記録はありません。"
+  },
+  "ui082": {
+    "message": "AIかも バッジが付く画像"
+  },
+  "ui083": {
+    "message": "画像自体に生成メタデータはありませんが、alt説明文だけが生成AIを示しています。"
+  },
+  "ui084": {
+    "message": "非生成かもバッジが付く画像"
+  },
+  "ui085": {
+    "message": "生成AIを示す手がかりがないため、灰色の「非生成かも」を表示し、詳細にはローカルモデルスコアを表示します。"
+  },
+  "ui086": {
+    "message": "CSS背景画像のテスト"
+  },
+  "ui087": {
+    "message": "設定で「CSS背景画像も確認する」を有効にすると AI【モデル判定】バッジが付きます。"
+  },
+  "ui088": {
+    "message": "実際のHTTPS画像URL"
+  },
+  "ui089": {
+    "message": "GitHub上のStable Diffusion公式サンプルを取得します。URL／説明文だけが根拠の場合は「AIかも」になります。"
+  },
+  "ui090": {
+    "message": "OpenAI SynthID操作デモ"
+  },
+  "ui091": {
+    "message": "紫色の抽象画像"
+  },
+  "ui092": {
+    "message": "C2PA付きの紫色の生成テスト画像"
+  },
+  "ui093": {
+    "message": "C2PA付きの人間制作テスト画像"
+  },
+  "ui094": {
+    "message": "青空と山を表す抽象画像"
+  },
+  "ui095": {
+    "message": "紫色の抽象背景"
+  },
+  "ui096": {
+    "message": "Stable Diffusion公式リポジトリのAI-generated sample"
+  },
+  "unavailableCount": {
+    "message": "$count$件は画像配信元の制限によりファイル内情報を取得できませんでした。URL・説明文の判定は継続しています。",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "unavailableReason": {
+    "message": "画像ファイルを取得できなかったため、生成AIかどうかを確認できませんでした。"
+  },
+  "unknownError": {
+    "message": "不明なエラー"
+  },
+  "unknownResult": {
+    "message": "結果不明"
+  },
+  "unknownTime": {
+    "message": "時刻不明"
+  },
+  "unknownUrl": {
+    "message": "URLを取得できませんでした"
+  },
+  "urlGeneratorName": {
+    "message": "URLに画像生成を示す名前が含まれます"
+  },
+  "urlText": {
+    "message": "URL文字列"
+  },
+  "webGpuUnavailable": {
+    "message": "このChrome環境ではWebGPUを利用できません"
+  }
+}

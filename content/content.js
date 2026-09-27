@@ -1,4 +1,5 @@
 (() => {
+  const t = (key, fallback, substitutions) => globalThis.AiImageBadgeI18n?.t(key, fallback, substitutions) || fallback;
   if (globalThis.__aiImageBadgeLoaded) return;
   globalThis.__aiImageBadgeLoaded = true;
 
@@ -172,31 +173,31 @@
 
   function openAiErrorMessage(code) {
     const messages = {
-      "missing-api-key": "OpenAI APIキーが未設定です。",
-      "api-http-400": "OpenAI APIが画像を受け付けませんでした。",
-      "api-http-401": "OpenAI APIキーが無効です。",
-      "api-http-403": "Content Provenance APIを利用する権限がありません。",
-      "api-http-404": "Content Provenance APIを利用できません。",
-      "api-http-413": "OpenAI APIへ送る画像が大きすぎます。",
-      "api-http-429": "OpenAI APIの利用上限に達しました。",
-      "api-http-500": "OpenAI APIで一時的な内部エラーが発生しました。",
-      "api-http-502": "OpenAI APIの接続先で一時的なエラーが発生しました。",
-      "api-http-503": "OpenAI APIが一時的に利用できません。",
-      "network-error": "OpenAI APIへ接続できませんでした。",
-      "timeout": "OpenAI APIがタイムアウトしました。",
-      "image-auth-required": "認証なしで取得できない画像のため、プライバシー保護のためOpenAIへ送信しませんでした。",
-      "image-too-large": "画像がOpenAI検証のサイズ上限を超えています。",
-      "unsupported-image-format": "OpenAI検証に対応していない画像形式です。",
-      "invalid-file": "OpenAI検証へ送る画像ファイルが無効です。",
-      "invalid-response": "OpenAI APIから想定外の応答が返りました。",
-      "openai-check-failed": "OpenAI検証を完了できませんでした。"
+      "missing-api-key": t("errMissingKey", "OpenAI APIキーが未設定です。"),
+      "api-http-400": t("errBadImage", "OpenAI APIが画像を受け付けませんでした。"),
+      "api-http-401": t("errInvalidKey", "OpenAI APIキーが無効です。"),
+      "api-http-403": t("errForbidden", "Content Provenance APIを利用する権限がありません。"),
+      "api-http-404": t("errApiUnavailable", "Content Provenance APIを利用できません。"),
+      "api-http-413": t("errApiTooLarge", "OpenAI APIへ送る画像が大きすぎます。"),
+      "api-http-429": t("errQuota", "OpenAI APIの利用上限に達しました。"),
+      "api-http-500": t("errApi500", "OpenAI APIで一時的な内部エラーが発生しました。"),
+      "api-http-502": t("errApi502", "OpenAI APIの接続先で一時的なエラーが発生しました。"),
+      "api-http-503": t("errApi503", "OpenAI APIが一時的に利用できません。"),
+      "network-error": t("errNetwork", "OpenAI APIへ接続できませんでした。"),
+      "timeout": t("errTimeout", "OpenAI APIがタイムアウトしました。"),
+      "image-auth-required": t("errAuthImage", "認証なしで取得できない画像のため、プライバシー保護のためOpenAIへ送信しませんでした。"),
+      "image-too-large": t("errImageSize", "画像がOpenAI検証のサイズ上限を超えています。"),
+      "unsupported-image-format": t("errFormat", "OpenAI検証に対応していない画像形式です。"),
+      "invalid-file": t("errFile", "OpenAI検証へ送る画像ファイルが無効です。"),
+      "invalid-response": t("errResponse", "OpenAI APIから想定外の応答が返りました。"),
+      "openai-check-failed": t("errCheck", "OpenAI検証を完了できませんでした。")
     };
     if (messages[code]) return messages[code];
     const imageHttp = String(code || "").match(/^image-http-(\d+)$/);
-    if (imageHttp) return `対象画像の取得に失敗しました（HTTP ${imageHttp[1]}）。`;
+    if (imageHttp) return t("errImageHttp", `対象画像の取得に失敗しました（HTTP ${imageHttp[1]}）。`, [imageHttp[1]]);
     const apiHttp = String(code || "").match(/^api-http-(\d+)$/);
-    if (apiHttp) return `OpenAI APIエラー（HTTP ${apiHttp[1]}）。`;
-    return String(code || "不明なエラー");
+    if (apiHttp) return t("errApiHttp", `OpenAI APIエラー（HTTP ${apiHttp[1]}）。`, [apiHttp[1]]);
+    return String(code || t("unknownError", "不明なエラー"));
   }
 
   function openAiDiagnosticText(result) {
@@ -204,16 +205,16 @@
     const diagnostic = result.diagnostic || {};
     const analysis = result.analysis || {};
     if (!diagnostic.openAiScheduled) {
-      return "OpenAI SynthID検証は1ページあたりの上限により未実行です。";
+      return t("checkPageLimit", "OpenAI SynthID検証は1ページあたりの上限により未実行です。");
     }
     if (diagnostic.openAiError) {
       if (diagnostic.openAiError === "image-auth-required") {
-        return `OpenAI SynthID検証は未実行です: ${openAiErrorMessage(diagnostic.openAiError)}`;
+        return t("apiNotRunDetail", `OpenAI SynthID検証は未実行です: ${openAiErrorMessage(diagnostic.openAiError)}`, [openAiErrorMessage(diagnostic.openAiError)]);
       }
-      return `OpenAI SynthID検証エラー: ${openAiErrorMessage(diagnostic.openAiError)}`;
+      return t("apiErrorDetail", `OpenAI SynthID検証エラー: ${openAiErrorMessage(diagnostic.openAiError)}`, [openAiErrorMessage(diagnostic.openAiError)]);
     }
     if (analysis.openAiChecked && !analysis.openAiDetected) {
-      return "OpenAI SynthID検証: 対応する信号は検出されませんでした。SNSの変換・縮小・再圧縮で検出できない場合があります。";
+      return t("apiNoSignalWarning", "OpenAI SynthID検証: 対応する信号は検出されませんでした。SNSの変換・縮小・再圧縮で検出できない場合があります。");
     }
     return "";
   }
@@ -221,12 +222,12 @@
   function openAiLogSource(rawUrl) {
     try {
       const parsed = new URL(rawUrl);
-      const rawName = parsed.pathname.split("/").filter(Boolean).pop() || "画像";
+      const rawName = parsed.pathname.split("/").filter(Boolean).pop() || t("image", "画像");
       let name = rawName;
       try { name = decodeURIComponent(rawName); } catch {}
       return `${parsed.hostname}/${name}`.slice(0, 160);
     } catch {
-      return "画像URLを取得できません";
+      return t("imageUrlFailed", "画像URLを取得できません");
     }
   }
 
@@ -235,18 +236,18 @@
     openAiLogKeys.add(sourceUrl);
     const errorCode = result.diagnostic.openAiError || "";
     let level = "info";
-    let message = "OpenAI由来の信号は検出されませんでした。";
+    let message = t("logNoSignal", "OpenAI由来の信号は検出されませんでした。");
     if (errorCode) {
       level = errorCode === "image-auth-required" ? "info" : "error";
       message = openAiErrorMessage(errorCode);
     } else if (result.synthIdDetected) {
       level = "success";
-      message = "OpenAI SynthIDを検出しました。";
+      message = t("logSynthId", "OpenAI SynthIDを検出しました。");
     } else if (result.basis === "openai-provenance" && result.c2paDetected) {
       level = "success";
-      message = "信頼済みC2PAを検出しました。";
+      message = t("logC2pa", "信頼済みC2PAを検出しました。");
     } else if (!result.analysis?.openAiChecked) {
-      message = "OpenAI検証は実行されませんでした。";
+      message = t("logNotRun", "OpenAI検証は実行されませんでした。");
     }
     openAiLogs.push({
       at: Date.now(),
@@ -300,9 +301,9 @@
     button.type = "button";
     const presentation = globalThis.ChatGptAiBadgePresentation?.getBadgePresentation(result) || {
       kind: result.status === "confirmed" ? "confirmed" : result.status === "likely" ? "likely" : "undetermined",
-      text: result.status === "confirmed" ? "AI【モデル判定】" : result.status === "likely" ? "AIかも" : "非生成かも",
-      method: "総合判定",
-      heading: "画像の判定結果"
+      text: result.status === "confirmed" ? t("badgeModel", "AI【モデル判定】") : result.status === "likely" ? t("badgeMaybe", "AIかも") : t("badgeNonAi", "非生成かも"),
+      method: t("combinedAssessment", "総合判定"),
+      heading: t("resultHeading", "画像の判定結果")
     };
     button.className = `badge ${presentation.kind}`;
     button.setAttribute("aria-expanded", "false");
@@ -317,27 +318,27 @@
     button.setAttribute("aria-controls", detail.id);
     const heading = presentation.heading;
     const defaultReason = result.unavailable
-      ? "画像ファイルを取得できなかったため、生成AIかどうかを確認できませんでした。"
-      : "生成AIと判断するのに十分な根拠は見つかりませんでした。";
+      ? t("unavailableReason", "画像ファイルを取得できなかったため、生成AIかどうかを確認できませんでした。")
+      : t("insufficientReason", "生成AIと判断するのに十分な根拠は見つかりませんでした。");
     const providedReasons = Array.isArray(result.reasons) ? result.reasons : [];
     const reasons = providedReasons.length > 0 ? providedReasons : [defaultReason];
     const openAiDiagnostic = openAiDiagnosticText(result);
     const detailHeading = document.createElement("strong");
     detailHeading.textContent = heading;
     detail.replaceChildren(detailHeading);
-    appendDetailParagraph(detail, presentation.method || "総合判定", "判定方式：");
+    appendDetailParagraph(detail, presentation.method || t("combinedAssessment", "総合判定"), t("methodPrefix", "判定方式："));
     if (presentation.localScore) {
-      appendDetailParagraph(detail, presentation.localScore, "ローカルモデルスコア：");
+      appendDetailParagraph(detail, presentation.localScore, t("scorePrefix", "ローカルモデルスコア："));
     }
     for (const reason of reasons) appendDetailParagraph(detail, reason);
     for (const advisory of result.analysis?.contextAdvisories || []) {
-      appendDetailParagraph(detail, advisory, "参考情報：");
+      appendDetailParagraph(detail, advisory, t("advisoryPrefix", "参考情報："));
     }
     if (openAiDiagnostic) appendDetailParagraph(detail, openAiDiagnostic);
     appendDetailParagraph(
       detail,
-      "本判定は参考情報です。画像の真贋、著作権、制作者や掲載者への評価を確定するものではありません。",
-      "注意："
+      t("disclaimer", "本判定は参考情報です。画像の真贋、著作権、制作者や掲載者への評価を確定するものではありません。"),
+      t("noticePrefix", "注意：")
     );
     button.title = `${heading}: ${providedReasons.join(" / ")}`;
 

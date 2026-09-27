@@ -1,0 +1,899 @@
+{
+  "activeImageCount": {
+    "message": "Active on a page with $count$ images",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "adminScreen": {
+    "message": "Admin"
+  },
+  "advisoryPrefix": {
+    "message": "Advisory: "
+  },
+  "aiHeading": {
+    "message": "Classified as AI-generated"
+  },
+  "allowlistHelp": {
+    "message": "This page does not match the allowlist. Add its URL in settings to enable analysis."
+  },
+  "apiC2paDetected": {
+    "message": "The official OpenAI API detected trusted Content Credentials"
+  },
+  "apiErrorDetail": {
+    "message": "OpenAI SynthID check error: $arg1$",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "apiNoSignalWarning": {
+    "message": "OpenAI SynthID check: no supported signal detected. Social-media conversion, resizing, or recompression may prevent detection."
+  },
+  "apiNotRunDetail": {
+    "message": "OpenAI SynthID check not performed: $arg1$",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "apiSynthIdDetected": {
+    "message": "The official OpenAI API detected a SynthID watermark"
+  },
+  "badgeC2pa": {
+    "message": "AI [C2PA]"
+  },
+  "badgeMaybe": {
+    "message": "Possibly AI"
+  },
+  "badgeMaybeC2pa": {
+    "message": "Possibly AI [C2PA]"
+  },
+  "badgeModel": {
+    "message": "AI [Model]"
+  },
+  "badgeNonAi": {
+    "message": "Possibly non-AI"
+  },
+  "badgeSynthId": {
+    "message": "AI [SynthID]"
+  },
+  "c2paFound": {
+    "message": "C2PA / Content Credentials detected"
+  },
+  "c2paHeading": {
+    "message": "Classified as AI-generated (generative AI origin found in C2PA)"
+  },
+  "c2paUnconfirmed": {
+    "message": "C2PA (generative AI origin not confirmed)"
+  },
+  "checking": {
+    "message": "Checking…"
+  },
+  "checkPageLimit": {
+    "message": "OpenAI SynthID check skipped: per-page limit reached."
+  },
+  "combinedAssessment": {
+    "message": "Combined assessment"
+  },
+  "conflictingEvidence": {
+    "message": "Conflicting evidence"
+  },
+  "credentialsAi": {
+    "message": "Content Credentials indicate generative AI origin"
+  },
+  "customModelLoaded": {
+    "message": "$model$ (trained model)",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      }
+    }
+  },
+  "customModelMissing": {
+    "message": "$model$ (trained model not installed)",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      }
+    }
+  },
+  "demoReason": {
+    "message": "Simulated OpenAI SynthID detection for UI testing. The real OpenAI API was not called."
+  },
+  "descriptionAi": {
+    "message": "The image description contains generative AI wording"
+  },
+  "disclaimer": {
+    "message": "This result is informational only. It does not establish authenticity, copyright, or judgments about the creator or publisher."
+  },
+  "errApi500": {
+    "message": "The OpenAI API encountered a temporary internal error."
+  },
+  "errApi502": {
+    "message": "The OpenAI API gateway encountered a temporary error."
+  },
+  "errApi503": {
+    "message": "The OpenAI API is temporarily unavailable."
+  },
+  "errApiHttp": {
+    "message": "OpenAI API error (HTTP $status$).",
+    "placeholders": {
+      "status": {
+        "content": "$1"
+      }
+    }
+  },
+  "errApiTooLarge": {
+    "message": "The image is too large for the OpenAI API."
+  },
+  "errApiUnavailable": {
+    "message": "The Content Provenance API is unavailable."
+  },
+  "errAuthImage": {
+    "message": "To protect your privacy, this image was not sent to OpenAI because it requires authentication."
+  },
+  "errBadImage": {
+    "message": "The OpenAI API rejected the image."
+  },
+  "errCheck": {
+    "message": "The OpenAI check could not be completed."
+  },
+  "errFile": {
+    "message": "The image file for the OpenAI check is invalid."
+  },
+  "errForbidden": {
+    "message": "Access to the Content Provenance API is not authorized."
+  },
+  "errFormat": {
+    "message": "This image format is not supported for OpenAI checks."
+  },
+  "errImageHttp": {
+    "message": "Could not retrieve the image (HTTP $arg1$).",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "errImageSize": {
+    "message": "The image exceeds the OpenAI check size limit."
+  },
+  "errInvalidKey": {
+    "message": "The OpenAI API key is invalid."
+  },
+  "errMissingKey": {
+    "message": "No OpenAI API key is configured."
+  },
+  "errNetwork": {
+    "message": "Could not connect to the OpenAI API."
+  },
+  "errQuota": {
+    "message": "The OpenAI API usage limit has been reached."
+  },
+  "errResponse": {
+    "message": "The OpenAI API returned an unexpected response."
+  },
+  "errTimeout": {
+    "message": "The OpenAI API request timed out."
+  },
+  "excludedPage": {
+    "message": "Paused by the URL exclusion list"
+  },
+  "excludedRuleHelp": {
+    "message": "This page matches the exclusion rule \"$rule$\". You can change it in settings.",
+    "placeholders": {
+      "rule": {
+        "content": "$1"
+      }
+    }
+  },
+  "extensionDescription": {
+    "message": "Labels AI images using provenance, three local models, and frequency/noise analysis, with explanations and optional OpenAI checks."
+  },
+  "extensionName": {
+    "message": "AI IMAGE BADGE"
+  },
+  "frequencyEvidence": {
+    "message": "Frequency/noise analysis"
+  },
+  "frequencyReinforced": {
+    "message": "Frequency/noise analysis supports the image model"
+  },
+  "frequencySupport": {
+    "message": "Frequency/noise analysis also found features resembling generated images"
+  },
+  "generatedMetadata": {
+    "message": "Generative AI metadata"
+  },
+  "gpuFallback": {
+    "message": ", GPU unavailable; switched to CPU"
+  },
+  "gpuInitFailed": {
+    "message": "Could not initialize the GPU"
+  },
+  "hide": {
+    "message": "Hide"
+  },
+  "hostGenerator": {
+    "message": "Image is served by an image-generation service"
+  },
+  "hostMidjourney": {
+    "message": "Image is served by a Midjourney host"
+  },
+  "hostModelService": {
+    "message": "Image is served by a generative-model service"
+  },
+  "hostOpenAi": {
+    "message": "Image is served by an OpenAI image host"
+  },
+  "hostOpenAiGenerator": {
+    "message": "Image is served by an OpenAI image-generation host"
+  },
+  "image": {
+    "message": "Image"
+  },
+  "imageUnavailable": {
+    "message": "Image unavailable (analysis incomplete)"
+  },
+  "imageUrlFailed": {
+    "message": "Image URL unavailable"
+  },
+  "insufficientReason": {
+    "message": "No sufficient evidence of generative AI origin was found."
+  },
+  "legacyCustom": {
+    "message": "Legacy custom model"
+  },
+  "localModel": {
+    "message": "Local image model"
+  },
+  "localModelReason": {
+    "message": "Local image model$arg1$: AI likelihood $arg2$%",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      },
+      "arg2": {
+        "content": "$2"
+      }
+    }
+  },
+  "logC2pa": {
+    "message": "Trusted C2PA detected."
+  },
+  "logCode": {
+    "message": " / Code: $code$",
+    "placeholders": {
+      "code": {
+        "content": "$1"
+      }
+    }
+  },
+  "logNoSignal": {
+    "message": "No OpenAI-origin signal was detected."
+  },
+  "logNotRun": {
+    "message": "The OpenAI check was not performed."
+  },
+  "logSource": {
+    "message": "Image: $source$$code$",
+    "placeholders": {
+      "source": {
+        "content": "$1"
+      },
+      "code": {
+        "content": "$2"
+      }
+    }
+  },
+  "logSynthId": {
+    "message": "OpenAI SynthID detected."
+  },
+  "maybeHeading": {
+    "message": "AI origin is uncertain"
+  },
+  "metadataDiffusionParams": {
+    "message": "Diffusion-model generation parameters found"
+  },
+  "metadataFirefly": {
+    "message": "Metadata indicates Adobe Firefly or Generative Fill"
+  },
+  "metadataMidjourney": {
+    "message": "Metadata indicates Midjourney"
+  },
+  "metadataOpenAi": {
+    "message": "Metadata indicates an OpenAI image-generation tool"
+  },
+  "metadataOther": {
+    "message": "Metadata indicates an image-generation service"
+  },
+  "metadataStableDiffusion": {
+    "message": "Stable Diffusion generation metadata found"
+  },
+  "methodAux": {
+    "message": "$model$ + supporting analysis",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      }
+    }
+  },
+  "methodFrequency": {
+    "message": "$model$ + frequency/noise analysis",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      }
+    }
+  },
+  "methodPrefix": {
+    "message": "Method: "
+  },
+  "modelDisagreement": {
+    "message": "The image model and URL/description clues disagree; shown as Possibly AI"
+  },
+  "modelLoadFirst": {
+    "message": "$model$: loads on first use ($backend$; $thresholds$)",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      },
+      "backend": {
+        "content": "$2"
+      },
+      "thresholds": {
+        "content": "$3"
+      }
+    }
+  },
+  "modelNotReady": {
+    "message": "$model$: not loaded or unavailable",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      }
+    }
+  },
+  "modelReady": {
+    "message": "$model$: ready ($backend$$fallback$; $thresholds$)",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      },
+      "backend": {
+        "content": "$2"
+      },
+      "fallback": {
+        "content": "$3"
+      },
+      "thresholds": {
+        "content": "$4"
+      }
+    }
+  },
+  "modelScore": {
+    "message": "$model$ / AI likelihood $score$%",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      },
+      "score": {
+        "content": "$2"
+      }
+    }
+  },
+  "modelStatusFailed": {
+    "message": "Local image model: status unavailable"
+  },
+  "noAiMethod": {
+    "message": "Combined assessment (no generative AI evidence)"
+  },
+  "noApiLogs": {
+    "message": "No API results yet. Images are checked as they approach the viewport."
+  },
+  "nonAiHeading": {
+    "message": "This image may not be AI-generated"
+  },
+  "notAllowedPage": {
+    "message": "Not in the URL allowlist"
+  },
+  "noticePrefix": {
+    "message": "Notice: "
+  },
+  "officialApi": {
+    "message": "Official OpenAI Content Provenance API"
+  },
+  "offscreenJustification": {
+    "message": "Run image classification locally and share one model across all tabs."
+  },
+  "openAiCountsNote": {
+    "message": "OpenAI SynthID: $checks$/$limit$ checks; $detected$ with OpenAI-origin signals.",
+    "placeholders": {
+      "checks": {
+        "content": "$1"
+      },
+      "limit": {
+        "content": "$2"
+      },
+      "detected": {
+        "content": "$3"
+      }
+    }
+  },
+  "openAiErrorsNote": {
+    "message": "OpenAI SynthID: $scheduled$/$limit$ scheduled; $errors$ skipped or failed. See the API log below for details.",
+    "placeholders": {
+      "scheduled": {
+        "content": "$1"
+      },
+      "limit": {
+        "content": "$2"
+      },
+      "errors": {
+        "content": "$3"
+      }
+    }
+  },
+  "openAiModel": {
+    "message": "OpenAI model: $arg1$",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "optionsTitle": {
+    "message": "$name$ Settings v$version$",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      },
+      "version": {
+        "content": "$2"
+      }
+    }
+  },
+  "pageConnected": {
+    "message": "Connected to this page"
+  },
+  "pageDescription": {
+    "message": "Page description"
+  },
+  "pageHintEvidence": {
+    "message": "Page description"
+  },
+  "pageImageRetry": {
+    "message": "Retrieved again from the page image"
+  },
+  "paused": {
+    "message": "Paused in settings"
+  },
+  "pixelBoundaries": {
+    "message": "Pronounced differences at 8-pixel boundaries"
+  },
+  "powerOff": {
+    "message": "Off: badges hidden"
+  },
+  "powerOn": {
+    "message": "On: checking images"
+  },
+  "preferGpu": {
+    "message": "GPU preferred; CPU fallback"
+  },
+  "protectedPage": {
+    "message": "This page is protected by Chrome"
+  },
+  "protectedPageHelp": {
+    "message": "Open a regular http:// or https:// page. Chrome internal pages, new tabs, and settings are not supported."
+  },
+  "provenanceNotAi": {
+    "message": "Provenance information found, but generative AI origin is not confirmed"
+  },
+  "reloadPageHelp": {
+    "message": "Reload the page, then reopen this popup."
+  },
+  "repeatedNoise": {
+    "message": "Repeating patterns found in fine noise"
+  },
+  "rescan": {
+    "message": "Rescan this page"
+  },
+  "resetSaved": {
+    "message": "Defaults restored"
+  },
+  "resultHeading": {
+    "message": "Image analysis result"
+  },
+  "saved": {
+    "message": "Saved"
+  },
+  "scorePrefix": {
+    "message": "Local model score: "
+  },
+  "scoreUnavailable": {
+    "message": "Unavailable (local model not run or analysis failed)"
+  },
+  "selectedModel": {
+    "message": "Selected model"
+  },
+  "show": {
+    "message": "Show"
+  },
+  "sourceUrl": {
+    "message": "Source URL"
+  },
+  "specifiedRule": {
+    "message": "specified rule"
+  },
+  "spectralPeak": {
+    "message": "Periodic peaks found in the frequency distribution"
+  },
+  "storeBlocked": {
+    "message": "Unavailable on the Chrome Web Store"
+  },
+  "storeBlockedHelp": {
+    "message": "Chrome prevents extensions from modifying Web Store pages. Try another website."
+  },
+  "synthIdC2paHeading": {
+    "message": "Classified as AI-generated (SynthID and trusted C2PA detected)"
+  },
+  "synthIdHeading": {
+    "message": "Classified as AI-generated (SynthID detected)"
+  },
+  "synthIdMethod": {
+    "message": "OpenAI SynthID (official OpenAI Content Provenance API)"
+  },
+  "tabConnectionFailed": {
+    "message": "Could not connect to this tab"
+  },
+  "testTitle": {
+    "message": "$name$ Test Page v$version$",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      },
+      "version": {
+        "content": "$2"
+      }
+    }
+  },
+  "thresholdSummary": {
+    "message": "Possibly AI $likely$% / AI $confirmed$%",
+    "placeholders": {
+      "likely": {
+        "content": "$1"
+      },
+      "confirmed": {
+        "content": "$2"
+      }
+    }
+  },
+  "trustedC2paMethod": {
+    "message": "Trusted C2PA (official OpenAI Content Provenance API)"
+  },
+  "ui001": {
+    "message": "Checking this page…"
+  },
+  "ui002": {
+    "message": "Retrieving URL…"
+  },
+  "ui003": {
+    "message": "Show badges"
+  },
+  "ui004": {
+    "message": "Checking status…"
+  },
+  "ui005": {
+    "message": "AI"
+  },
+  "ui006": {
+    "message": "Checked"
+  },
+  "ui007": {
+    "message": "indicates OpenAI SynthID, generative AI C2PA, or strong model-based evidence."
+  },
+  "ui008": {
+    "message": "indicates limited/conflicting evidence or an unavailable image;"
+  },
+  "ui009": {
+    "message": "indicates no generative AI evidence was found."
+  },
+  "ui010": {
+    "message": "Local image model: checking status…"
+  },
+  "ui011": {
+    "message": "OpenAI API log (current page)"
+  },
+  "ui012": {
+    "message": "Images and API keys are not stored in logs. Logs clear on reload or rescan."
+  },
+  "ui013": {
+    "message": "Settings"
+  },
+  "ui014": {
+    "message": "Open test page"
+  },
+  "ui015": {
+    "message": "Turn badges on or off"
+  },
+  "ui016": {
+    "message": "Analysis results"
+  },
+  "ui017": {
+    "message": "AI IMAGE BADGE Settings"
+  },
+  "ui018": {
+    "message": "Normal analysis runs on your device. Images are sent to OpenAI's Content Provenance API only when OpenAI SynthID checks are enabled."
+  },
+  "ui019": {
+    "message": "Show badges"
+  },
+  "ui020": {
+    "message": "Enable detection on pages allowed by your URL rules."
+  },
+  "ui021": {
+    "message": "URL allowlist"
+  },
+  "ui022": {
+    "message": "One rule per line. Leave empty to allow all HTTP/HTTPS pages; otherwise, only matching pages are analyzed."
+  },
+  "ui023": {
+    "message": "URL exclusion list"
+  },
+  "ui024": {
+    "message": "One rule per line. Exclusions override the allowlist. A bare domain includes subdomains; use * as a wildcard."
+  },
+  "ui025": {
+    "message": "Also show \"Possibly AI\""
+  },
+  "ui026": {
+    "message": "Label images with limited/conflicting evidence, unavailable images, or C2PA without confirmed generative origin."
+  },
+  "ui027": {
+    "message": "Also show \"Possibly non-AI\""
+  },
+  "ui028": {
+    "message": "Show a gray badge when no generative AI evidence is found."
+  },
+  "ui029": {
+    "message": "Use page descriptions"
+  },
+  "ui030": {
+    "message": "Check alt text, titles, and captions for wording such as AI-generated."
+  },
+  "ui031": {
+    "message": "Use the local image model"
+  },
+  "ui032": {
+    "message": "Analyze pixels locally with the selected image model. Loading the bundled model on first use may take time."
+  },
+  "ui033": {
+    "message": "Local detection model"
+  },
+  "ui034": {
+    "message": "Models differ in training data and output. Saving a change reanalyzes open pages with the selected model."
+  },
+  "ui035": {
+    "message": "Community Forensics ViT (default, 87 MB)"
+  },
+  "ui036": {
+    "message": "Distilled ViT Q4 (lightweight, 11 MB)"
+  },
+  "ui037": {
+    "message": "CapCheck ViT-Base Q4 (CIFAKE, 57 MB)"
+  },
+  "ui038": {
+    "message": "Community Forensics Custom (trained model not installed)"
+  },
+  "ui039": {
+    "message": "ResNet-18 Custom (trained model not installed)"
+  },
+  "ui040": {
+    "message": "Legacy custom model (trained model not installed)"
+  },
+  "ui041": {
+    "message": "Use GPU acceleration"
+  },
+  "ui042": {
+    "message": "Accelerate local inference with WebGPU. If unavailable or a GPU error occurs, automatically fall back to CPU (WASM). Off by default."
+  },
+  "ui043": {
+    "message": "\"Possibly AI\" local threshold"
+  },
+  "ui044": {
+    "message": "An AI score at or above this value produces \"Possibly AI\". Lower values increase detections but may also increase false positives."
+  },
+  "ui045": {
+    "message": "\"AI [Model]\" strong local threshold"
+  },
+  "ui046": {
+    "message": "A score at or above this value, supported by frequency analysis or URL/description clues, produces \"AI [Model]\". Must not be below the \"Possibly AI\" threshold."
+  },
+  "ui047": {
+    "message": "Use frequency/noise analysis"
+  },
+  "ui048": {
+    "message": "Use periodicity, residual noise, and 8-pixel boundaries as supporting evidence. This analysis alone does not classify an image as AI."
+  },
+  "ui049": {
+    "message": "Use OpenAI SynthID checks (highest priority)"
+  },
+  "ui050": {
+    "message": "Upload images to the official OpenAI API, prioritizing SynthID, then trusted C2PA. Authentication cookies are not used; images requiring login are not sent to OpenAI. Social-media conversion/compression may prevent detection. OpenAI's terms apply to API charges and uploaded data. Off by default."
+  },
+  "ui051": {
+    "message": "OpenAI API key"
+  },
+  "ui052": {
+    "message": "Stored only in this device's Chrome local storage, not synced. Extension storage is not encrypted on disk, so processes that can read your Chrome profile may access it. Use a dedicated OpenAI project/key for this extension and set a low project usage limit."
+  },
+  "ui053": {
+    "message": "OpenAI checks per page"
+  },
+  "ui054": {
+    "message": "Duplicate URLs count once. Images above the limit receive local analysis only."
+  },
+  "ui055": {
+    "message": "checks"
+  },
+  "ui056": {
+    "message": "Also scan CSS background images"
+  },
+  "ui057": {
+    "message": "May slightly reduce performance on some pages."
+  },
+  "ui058": {
+    "message": "Minimum image size to scan"
+  },
+  "ui059": {
+    "message": "Exclude small icons."
+  },
+  "ui060": {
+    "message": "Save"
+  },
+  "ui061": {
+    "message": "Restore defaults"
+  },
+  "ui062": {
+    "message": "About detection"
+  },
+  "ui063": {
+    "message": "URL rules apply to the page you are viewing, not to image source URLs. Exclusions always take priority. Scores from bundled and custom models are not directly comparable; edits, compression, and unknown generators may change results."
+  },
+  "ui064": {
+    "message": "Possibly AI threshold"
+  },
+  "ui065": {
+    "message": "Strong AI threshold"
+  },
+  "ui066": {
+    "message": "OpenAI API key (unencrypted local storage)"
+  },
+  "ui067": {
+    "message": "OpenAI check limit"
+  },
+  "ui068": {
+    "message": "Minimum width"
+  },
+  "ui069": {
+    "message": "Minimum height"
+  },
+  "ui070": {
+    "message": "AI IMAGE BADGE Test Page"
+  },
+  "ui071": {
+    "message": "Functional Test"
+  },
+  "ui072": {
+    "message": "Opened from the extension popup. Test images are 800×500 px. Click a badge at the top right of an image to see the reasoning."
+  },
+  "ui073": {
+    "message": "Demo image with an AI [SynthID] badge"
+  },
+  "ui074": {
+    "message": "For testing the badge and detail dialog. Detection is simulated; the OpenAI API is not called and no charges occur."
+  },
+  "ui075": {
+    "message": "Image with an AI [Model] badge"
+  },
+  "ui076": {
+    "message": "The image contains"
+  },
+  "ui077": {
+    "message": "generation metadata. Click the badge to see the method."
+  },
+  "ui078": {
+    "message": "Image with an AI [C2PA] badge"
+  },
+  "ui079": {
+    "message": "test records are included."
+  },
+  "ui080": {
+    "message": "Image with a Possibly AI [C2PA] badge"
+  },
+  "ui081": {
+    "message": "C2PA is present, but no record indicates generative AI origin."
+  },
+  "ui082": {
+    "message": "Image with a Possibly AI badge"
+  },
+  "ui083": {
+    "message": "No generation metadata is present; only the alt description suggests generative AI."
+  },
+  "ui084": {
+    "message": "Image with a Possibly non-AI badge"
+  },
+  "ui085": {
+    "message": "No generative AI clues are present. A gray \"Possibly non-AI\" badge is shown, with the local model score in the details."
+  },
+  "ui086": {
+    "message": "CSS background image test"
+  },
+  "ui087": {
+    "message": "Enable \"Also scan CSS background images\" in settings to show the AI [Model] badge."
+  },
+  "ui088": {
+    "message": "Real HTTPS image URL"
+  },
+  "ui089": {
+    "message": "Loads an official Stable Diffusion sample from GitHub. URL/description evidence alone produces \"Possibly AI\"."
+  },
+  "ui090": {
+    "message": "OpenAI SynthID UI demo"
+  },
+  "ui091": {
+    "message": "Purple abstract image"
+  },
+  "ui092": {
+    "message": "Purple generated test image with C2PA"
+  },
+  "ui093": {
+    "message": "Human-created test image with C2PA"
+  },
+  "ui094": {
+    "message": "Abstract image of blue sky and mountains"
+  },
+  "ui095": {
+    "message": "Purple abstract background"
+  },
+  "ui096": {
+    "message": "AI-generated sample from the official Stable Diffusion repository"
+  },
+  "unavailableCount": {
+    "message": "File metadata was unavailable for $count$ images due to source restrictions. URL/description analysis continues.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "unavailableReason": {
+    "message": "Could not determine generative AI origin because the image file was unavailable."
+  },
+  "unknownError": {
+    "message": "Unknown error"
+  },
+  "unknownResult": {
+    "message": "Unknown result"
+  },
+  "unknownTime": {
+    "message": "Unknown time"
+  },
+  "unknownUrl": {
+    "message": "Could not retrieve the URL"
+  },
+  "urlGeneratorName": {
+    "message": "The URL contains a name associated with image generation"
+  },
+  "urlText": {
+    "message": "URL text"
+  },
+  "webGpuUnavailable": {
+    "message": "WebGPU is unavailable in this Chrome environment"
+  }
+}
