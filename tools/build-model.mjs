@@ -33,9 +33,30 @@ async function vendorRuntime() {
 
 async function fetchWeights(model) {
   const targetDir = join(ROOT, "model");
+  if (typeof model.weights === "object") {
+    const targets = [];
+    const sets = [
+      ["wasm", model.weights, model.sha256],
+      ...(model.webgpu_weights ? [["webgpu", model.webgpu_weights, model.webgpu_sha256]] : [])
+    ];
+    for (const [variant, weights, hashes] of sets) {
+      for (const [role, filename] of Object.entries(weights)) {
+        const target = join(targetDir, filename);
+        if (!existsSync(target)) {
+          throw new Error(`${model.id}の変換済み${variant}モデルがありません: ${filename}`);
+        }
+        const actual = await sha256(target);
+        if (actual !== hashes?.[role]) {
+          throw new Error(`${model.id}/${variant}/${role}のSHA-256が一致しません: ${actual}`);
+        }
+        targets.push(target);
+      }
+    }
+    return targets;
+  }
   const target = join(targetDir, model.weights);
   await mkdir(targetDir, { recursive: true });
-  if (existsSync(target) && await sha256(target) === model.sha256) return target;
+  if (existsSync(target) && await sha256(target) === model.sha256) return [target];
 
   const url = `https://huggingface.co/${model.repo}/resolve/${model.revision}/${model.path}`;
   const response = await fetch(url);
@@ -46,7 +67,7 @@ async function fetchWeights(model) {
     throw new Error(`モデルのSHA-256が一致しません: ${actual}`);
   }
   await writeFile(target, bytes);
-  return target;
+  return [target];
 }
 
 async function writeConfig() {
@@ -54,37 +75,31 @@ async function writeConfig() {
     label: model.label,
     model_id: `${model.repo}@${model.revision.slice(0, 12)}`,
     weights: model.weights,
+    ...(model.webgpu_weights ? { webgpu_weights: model.webgpu_weights } : {}),
     input_size: model.input_size,
     preprocess: model.preprocess,
     image_mean: model.image_mean,
     image_std: model.image_std,
     views: model.views,
+    ...(model.patch_stride ? { patch_stride: model.patch_stride } : {}),
+    ...(model.mask_radius ? { mask_radius: model.mask_radius } : {}),
+    ...(model.feature_dim ? { feature_dim: model.feature_dim } : {}),
+    ...(model.batch_size ? { batch_size: model.batch_size } : {}),
+    ...(model.max_patches ? { max_patches: model.max_patches } : {}),
     output: model.output,
     ...(model.calibration ? { calibration: model.calibration } : {}),
     threshold: model.threshold,
     source: model.source
   }]));
   const configPath = join(ROOT, "model", "config.json");
-  if (existsSync(configPath)) {
-    try {
-      const existing = JSON.parse(await readFile(configPath, "utf8"));
-      const customIds = ["community-forensics-custom", "resnet18-custom", "chatgpt-custom"];
-      for (const customId of customIds) {
-        const custom = existing?.models?.[customId];
-        if (custom?.weights && existsSync(join(ROOT, "model", custom.weights))) {
-          models[customId] = custom;
-        }
-      }
-    } catch {}
-  }
   const config = { default_model: REGISTRY.default_model, models };
   await writeFile(configPath, `${JSON.stringify(config, null, 2)}\n`);
 }
 
 await vendorRuntime();
 const modelPaths = [];
-for (const model of REGISTRY.models) modelPaths.push(await fetchWeights(model));
+for (const model of REGISTRY.models) modelPaths.push(...await fetchWeights(model));
 await writeConfig();
 let size = 0;
 for (const modelPath of modelPaths) size += (await stat(modelPath)).size;
-console.log(`3モデルとONNX Runtimeを準備しました (${(size / 1e6).toFixed(1)} MB)`);
+console.log(`${REGISTRY.models.length}モデルとONNX Runtimeを準備しました (${(size / 1e6).toFixed(1)} MB)`);

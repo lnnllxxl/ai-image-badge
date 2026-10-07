@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "AI IMAGE BADGE",
-  "version": "0.13.1",
+  "version": "0.13.9",
   "description": "__MSG_extensionDescription__",
   "minimum_chrome_version": "116",
   "permissions": [

@@ -212,23 +212,6 @@ export function inspectUrl(rawUrl) {
   return null;
 }
 
-export function inspectPageHints(hints) {
-  const text = String(hints || "").slice(0, 1000);
-  const strong = /(?:generated|created|made)\s+(?:by|with|using)\s+(?:an?\s+)?(?:generative\s+)?ai|ai[\s_-]*generated|生成\s*ai|ai\s*(?:で\s*)?生成|生成ai(?:で|によって|を使)/i;
-  const generator = /stable diffusion|midjourney|dall[\s._-]*e|adobe firefly|gpt-image|comfyui/i;
-
-  if (strong.test(text) || generator.test(text)) {
-    return {
-      status: "likely",
-      confidence: strong.test(text) && generator.test(text) ? 0.72 : 0.58,
-      reasons: [t("descriptionAi", "画像の説明文に生成AIを示す表現があります")],
-      evidence: [t("pageHintEvidence", "ページ上の説明")]
-    };
-  }
-
-  return null;
-}
-
 export async function inspectBytes(input, metadata = {}) {
   const bytes = input instanceof Uint8Array ? input : new Uint8Array(input || 0);
   const extractedText = await extractPngText(bytes);
@@ -291,19 +274,16 @@ function normalizeLocalThresholds(value) {
 }
 
 /**
- * 明示メタデータ、画像モデル、周波数解析、ページ文脈を統合する。
+ * 明示メタデータ、画像モデル、周波数解析、任意の公式来歴検証を統合する。
  * 周波数解析だけではAI判定を出さず、常に補助根拠として扱う。
  */
 export function fuseDetectionResults({
   byteResult = null,
   urlResult = null,
-  hintResult = null,
   localAnalysis = null,
   openAiProvenance = null,
   localThresholds = DEFAULT_LOCAL_THRESHOLDS
 } = {}) {
-  const context = chooseBestResult(urlResult, hintResult);
-  const labelContext = chooseBestResult(hintResult);
   const pixel = localAnalysis?.pixel || null;
   const frequency = localAnalysis?.frequency || null;
   const probability = Number.isFinite(pixel?.probability) ? pixel.probability : null;
@@ -313,6 +293,14 @@ export function fuseDetectionResults({
   const analysis = {
     pixelProbability: probability,
     frequencyAnomaly: anomaly,
+    frequencyProfile: frequency?.analysisProfile || "",
+    frequencyEnhanced: Boolean(frequency?.enhanced),
+    frequencyBackend: frequency?.backend || "",
+    frequencyGpuFallback: Boolean(frequency?.gpuFallback),
+    frequencyGpuError: frequency?.gpuError || "",
+    frequencyRegionCount: Number(frequency?.metrics?.regionCount) || 0,
+    frequencySampleSize: Number(frequency?.metrics?.sampleSize) || 0,
+    jpegCompressionStrength: Number(frequency?.metrics?.jpegCompressionStrength) || 0,
     localLikelyThreshold: thresholds.likely,
     localConfirmedThreshold: thresholds.confirmed,
     backend: pixel?.backend || "",
@@ -370,21 +358,44 @@ export function fuseDetectionResults({
   const modelReason = probability === null
     ? ""
     : t("localModelReason", `ローカル画像モデル${pixel?.modelLabel ? `（${pixel.modelLabel}）` : ""}: 生成AIらしさ ${Math.round(probability * 100)}%`, [pixel?.modelLabel ? ` (${pixel.modelLabel})` : "", Math.round(probability * 100)]);
+  const frequencyProfileLabels = {
+    fast: t("frequencyProfileFast", "高速"),
+    standard: t("frequencyProfileStandard", "標準"),
+    detailed: t("frequencyProfileDetailed", "詳細")
+  };
+  const frequencyBackend = frequency?.backend === "webgpu"
+    ? "GPU / WebGPU"
+    : frequency?.gpuFallback
+      ? t("frequencyCpuFallback", "CPU（GPU利用不可のため自動切替）")
+      : "CPU";
+  const frequencyDetail = frequency?.analysisProfile
+    ? t(
+      "frequencyProfileDetail",
+      `周波数解析：${frequencyProfileLabels[frequency.analysisProfile] || frequency.analysisProfile}（${Number(frequency.metrics?.regionCount) || 1}領域・${Number(frequency.metrics?.sampleSize) || 64}px・${frequencyBackend}${Number(frequency.metrics?.jpegCompressionStrength) > 0 ? "・JPEG補正" : ""}）`,
+      [
+        frequencyProfileLabels[frequency.analysisProfile] || frequency.analysisProfile,
+        Number(frequency.metrics?.regionCount) || 1,
+        Number(frequency.metrics?.sampleSize) || 64,
+        frequencyBackend,
+        Number(frequency.metrics?.jpegCompressionStrength) > 0 ? t("jpegCompensatedSuffix", "・JPEG補正") : ""
+      ]
+    )
+    : "";
+  analysis.frequencySummary = frequencyDetail;
   const frequencyStrong = anomaly !== null && anomaly >= 0.55;
-  const contextSupport = context.status === "likely";
-  const contextStrong = labelContext.status === "likely";
 
-  if (probability !== null && probability >= thresholds.confirmed && (frequencyStrong || contextSupport)) {
-    const supportingReasons = frequencyStrong
-      ? [t("frequencySupport", "周波数・ノイズ解析でも生成画像に似た特徴を検出しました"), ...(frequency.reasons || [])]
-      : context.reasons;
+  if (probability !== null && probability >= thresholds.confirmed && frequencyStrong) {
+    const supportingReasons = [
+      t("frequencySupport", "周波数・ノイズ解析でも生成画像に似た特徴を検出しました"),
+      ...(frequency.reasons || [])
+    ];
     return {
       status: "confirmed",
       confidence: Math.max(0.9, probability),
       reasons: mergeUnique(modelReason, supportingReasons),
       evidence: mergeUnique(
         t("localModel", "ローカル画像モデル"),
-        frequencyStrong ? t("frequencyEvidence", "周波数・ノイズ分析") : context.evidence
+        t("frequencyEvidence", "周波数・ノイズ分析")
       ),
       basis: "multiple-signals",
       c2paDetected,
@@ -416,27 +427,14 @@ export function fuseDetectionResults({
     };
   }
 
-  if (contextStrong && !(probability !== null && probability <= 0.35)) {
-    return {
-      ...labelContext,
-      basis: "page-context",
-      c2paDetected,
-      analysis
-    };
-  }
-
-  const disagreement = contextStrong && probability !== null && probability <= 0.35;
   return {
     status: "none",
     confidence: 0,
-    reasons: mergeUnique(
-      byteResult?.reasons,
-      disagreement ? t("modelDisagreement", "画像モデルとURL／説明文の手がかりが一致しないためAIかもとして表示します") : null
-    ),
+    reasons: mergeUnique(byteResult?.reasons),
     evidence: mergeUnique(byteResult?.evidence),
     hasProvenance: Boolean(byteResult?.hasProvenance),
     c2paDetected,
-    basis: disagreement ? "conflicting-signals" : "no-sufficient-signal",
+    basis: "no-sufficient-signal",
     analysis
   };
 }

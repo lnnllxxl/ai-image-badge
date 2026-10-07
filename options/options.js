@@ -6,11 +6,11 @@ const DEFAULTS = {
   urlExcludeList: "",
   showLikely: true,
   showUndetermined: true,
-  usePageHints: true,
   usePixelClassifier: true,
   localModel: "community",
   useGpuAcceleration: false,
   useFrequencyAnalysis: true,
+  frequencyAnalysisMode: "fast",
   localLikelyThreshold: 50,
   localConfirmedThreshold: 90,
   useOpenAiProvenance: false,
@@ -22,13 +22,14 @@ const DEFAULTS = {
 
 const form = document.querySelector("#settings");
 const saved = document.querySelector("#saved");
+const openAiConsentDialog = document.querySelector("#openai-consent-dialog");
+const openAiConsentCheckbox = document.querySelector("#openai-consent-checkbox");
+const openAiConsentAccept = document.querySelector("#openai-consent-accept");
+const openAiConsentError = document.querySelector("#openai-consent-error");
+let openAiConsentAccepted = false;
 const BUILTIN_LOCAL_MODELS = ["community", "distilled", "capcheck"];
-const CUSTOM_LOCAL_MODELS = [
-  { id: "community-forensics-custom", fallback: "Community Forensics Custom" },
-  { id: "resnet18-custom", fallback: "ResNet-18 Custom" },
-  { id: "chatgpt-custom", fallback: t("legacyCustom", "旧カスタムモデル") }
-];
 const availableLocalModels = new Set(BUILTIN_LOCAL_MODELS);
+const FREQUENCY_ANALYSIS_MODES = new Set(["fast", "standard", "detailed"]);
 const manifest = chrome.runtime.getManifest();
 const appName = t("extensionName", "AI IMAGE BADGE");
 document.querySelector("#app-name").textContent = appName;
@@ -60,42 +61,18 @@ function normalizeSettings(values) {
   const localModel = availableLocalModels.has(values.localModel)
     ? values.localModel
     : DEFAULTS.localModel;
+  const frequencyAnalysisMode = FREQUENCY_ANALYSIS_MODES.has(values.frequencyAnalysisMode)
+    ? values.frequencyAnalysisMode
+    : DEFAULTS.frequencyAnalysisMode;
   return {
     ...values,
     urlAllowList: normalizeRuleList(values.urlAllowList),
     urlExcludeList: normalizeRuleList(values.urlExcludeList),
     localModel,
+    frequencyAnalysisMode,
     localLikelyThreshold: likely,
     localConfirmedThreshold: confirmed
   };
-}
-
-async function loadAvailableLocalModels() {
-  try {
-    const response = await fetch(chrome.runtime.getURL("model/config.json"));
-    if (!response.ok) throw new Error("model registry unavailable");
-    const registry = await response.json();
-    for (const customModel of CUSTOM_LOCAL_MODELS) {
-      const option = form.elements.localModel.querySelector(`option[value="${customModel.id}"]`);
-      const custom = registry?.models?.[customModel.id];
-      if (custom?.weights) {
-        availableLocalModels.add(customModel.id);
-        option.disabled = false;
-        option.textContent = t("customModelLoaded", `${custom.label || customModel.fallback}（教育モデル）`, [custom.label || customModel.fallback]);
-      } else {
-        availableLocalModels.delete(customModel.id);
-        option.disabled = true;
-        option.textContent = t("customModelMissing", `${customModel.fallback}（学習モデル未導入）`, [customModel.fallback]);
-      }
-    }
-  } catch {
-    for (const customModel of CUSTOM_LOCAL_MODELS) {
-      const option = form.elements.localModel.querySelector(`option[value="${customModel.id}"]`);
-      availableLocalModels.delete(customModel.id);
-      option.disabled = true;
-      option.textContent = t("customModelMissing", `${customModel.fallback}（学習モデル未導入）`, [customModel.fallback]);
-    }
-  }
 }
 
 function syncThresholdLimits() {
@@ -108,6 +85,10 @@ function syncThresholdLimits() {
   if (Number(confirmed.value) < likely) confirmed.value = String(likely);
 }
 
+function syncFrequencyControls() {
+  form.elements.frequencyAnalysisMode.disabled = !form.elements.useFrequencyAnalysis.checked;
+}
+
 function fill(values) {
   const normalized = normalizeSettings(values);
   for (const [key, fallback] of Object.entries(DEFAULTS)) {
@@ -116,6 +97,7 @@ function fill(values) {
     else input.value = normalized[key];
   }
   syncThresholdLimits();
+  syncFrequencyControls();
 }
 
 function read() {
@@ -125,11 +107,11 @@ function read() {
     urlExcludeList: form.elements.urlExcludeList.value,
     showLikely: form.elements.showLikely.checked,
     showUndetermined: form.elements.showUndetermined.checked,
-    usePageHints: form.elements.usePageHints.checked,
     usePixelClassifier: form.elements.usePixelClassifier.checked,
     localModel: form.elements.localModel.value,
     useGpuAcceleration: form.elements.useGpuAcceleration.checked,
     useFrequencyAnalysis: form.elements.useFrequencyAnalysis.checked,
+    frequencyAnalysisMode: form.elements.frequencyAnalysisMode.value,
     localLikelyThreshold: form.elements.localLikelyThreshold.value,
     localConfirmedThreshold: form.elements.localConfirmedThreshold.value,
     useOpenAiProvenance: form.elements.useOpenAiProvenance.checked,
@@ -146,13 +128,63 @@ async function flashSaved(message) {
   setTimeout(() => { saved.textContent = ""; }, 1800);
 }
 
+function openOpenAiConsentDialog() {
+  openAiConsentCheckbox.checked = false;
+  openAiConsentAccept.disabled = true;
+  openAiConsentError.hidden = true;
+  if (!openAiConsentDialog.open) openAiConsentDialog.showModal();
+  openAiConsentCheckbox.focus();
+}
+
+function cancelOpenAiConsent() {
+  form.elements.useOpenAiProvenance.checked = false;
+  openAiConsentAccepted = false;
+  if (openAiConsentDialog.open) openAiConsentDialog.close();
+}
+
+form.elements.useOpenAiProvenance.addEventListener("change", () => {
+  if (!form.elements.useOpenAiProvenance.checked) {
+    openAiConsentAccepted = false;
+    return;
+  }
+  form.elements.useOpenAiProvenance.checked = false;
+  openOpenAiConsentDialog();
+});
+
+openAiConsentCheckbox.addEventListener("change", () => {
+  openAiConsentAccept.disabled = !openAiConsentCheckbox.checked;
+  openAiConsentError.hidden = openAiConsentCheckbox.checked;
+});
+
+openAiConsentAccept.addEventListener("click", () => {
+  if (!openAiConsentCheckbox.checked) {
+    openAiConsentError.hidden = false;
+    return;
+  }
+  openAiConsentAccepted = true;
+  form.elements.useOpenAiProvenance.checked = true;
+  openAiConsentDialog.close();
+});
+
+document.querySelector("#openai-consent-cancel").addEventListener("click", cancelOpenAiConsent);
+openAiConsentDialog.addEventListener("cancel", (event) => {
+  event.preventDefault();
+  cancelOpenAiConsent();
+});
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const values = read();
-  await Promise.all([
-    chrome.storage.sync.set(values),
-    chrome.storage.local.set({ openAiApiKey: form.elements.openAiApiKey.value.trim() })
-  ]);
+  if (values.useOpenAiProvenance && !openAiConsentAccepted) {
+    form.elements.useOpenAiProvenance.checked = false;
+    openOpenAiConsentDialog();
+    return;
+  }
+  await chrome.storage.local.set({
+    openAiApiKey: form.elements.openAiApiKey.value.trim(),
+    openAiConsentAccepted: values.useOpenAiProvenance && openAiConsentAccepted
+  });
+  await chrome.storage.sync.set(values);
   fill(values);
   void flashSaved(t("saved", "保存しました"));
 });
@@ -160,8 +192,9 @@ form.addEventListener("submit", async (event) => {
 document.querySelector("#reset").addEventListener("click", async () => {
   await Promise.all([
     chrome.storage.sync.clear(),
-    chrome.storage.local.remove("openAiApiKey")
+    chrome.storage.local.remove(["openAiApiKey", "openAiConsentAccepted"])
   ]);
+  openAiConsentAccepted = false;
   fill(DEFAULTS);
   form.elements.openAiApiKey.value = "";
   void flashSaved(t("resetSaved", "初期設定に戻しました"));
@@ -175,12 +208,19 @@ document.querySelector("#toggle-key").addEventListener("click", (event) => {
 });
 
 form.elements.localLikelyThreshold.addEventListener("input", syncThresholdLimits);
+form.elements.useFrequencyAnalysis.addEventListener("change", syncFrequencyControls);
 
 void Promise.all([
-  loadAvailableLocalModels(),
   chrome.storage.sync.get(DEFAULTS),
-  chrome.storage.local.get({ openAiApiKey: "" })
-]).then(([_models, values, local]) => {
-  fill(values);
+  chrome.storage.local.get({ openAiApiKey: "", openAiConsentAccepted: false })
+]).then(([values, local]) => {
+  openAiConsentAccepted = values.useOpenAiProvenance && local.openAiConsentAccepted === true;
+  const safeValues = openAiConsentAccepted
+    ? values
+    : { ...values, useOpenAiProvenance: false };
+  fill(safeValues);
   form.elements.openAiApiKey.value = local.openAiApiKey || "";
+  if (values.useOpenAiProvenance && !openAiConsentAccepted) {
+    void chrome.storage.sync.set({ useOpenAiProvenance: false });
+  }
 });

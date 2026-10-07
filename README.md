@@ -14,7 +14,7 @@ Chromeで表示中の画像を確認し、画像来歴情報、端末内画像�
 
 ## インストール
 
-1. GitHub Releasesから `ai-image-badge-release-v0.13.1.zip` を取得して展開します。
+1. GitHub Releasesから `ai-image-badge-release-v0.13.9.zip` を取得して展開します。
 2. Chromeで `chrome://extensions` を開きます。
 3. 「デベロッパーモード」を有効にします。
 4. 「パッケージ化されていない拡張機能を読み込む」から展開フォルダーを選択します。

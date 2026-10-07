@@ -71,6 +71,9 @@
   "c2paUnconfirmed": {
     "message": "C2PA (generative AI origin not confirmed)"
   },
+  "cancel": {
+    "message": "Cancel"
+  },
   "checking": {
     "message": "Checking…"
   },
@@ -80,33 +83,11 @@
   "combinedAssessment": {
     "message": "Combined assessment"
   },
-  "conflictingEvidence": {
-    "message": "Conflicting evidence"
-  },
   "credentialsAi": {
     "message": "Content Credentials indicate generative AI origin"
   },
-  "customModelLoaded": {
-    "message": "$model$ (trained model)",
-    "placeholders": {
-      "model": {
-        "content": "$1"
-      }
-    }
-  },
-  "customModelMissing": {
-    "message": "$model$ (trained model not installed)",
-    "placeholders": {
-      "model": {
-        "content": "$1"
-      }
-    }
-  },
   "demoReason": {
     "message": "Simulated OpenAI SynthID detection for UI testing. The real OpenAI API was not called."
-  },
-  "descriptionAi": {
-    "message": "The image description contains generative AI wording"
   },
   "disclaimer": {
     "message": "This result is informational only. It does not establish authenticity, copyright, or judgments about the creator or publisher."
@@ -166,6 +147,9 @@
   "errInvalidKey": {
     "message": "The OpenAI API key is invalid."
   },
+  "errMissingConsent": {
+    "message": "Consent for sending images to OpenAI and possible API charges is incomplete. Enable the feature again in Settings."
+  },
   "errMissingKey": {
     "message": "No OpenAI API key is configured."
   },
@@ -193,13 +177,60 @@
     }
   },
   "extensionDescription": {
-    "message": "Labels AI images using provenance, three local models, and frequency/noise analysis, with explanations and optional OpenAI checks."
+    "message": "Labels AI images using image provenance, three local models, and frequency/noise analysis, with reasons and optional OpenAI checks."
   },
   "extensionName": {
     "message": "AI IMAGE BADGE"
   },
+  "frequencyAnalysisModeHelp": {
+    "message": "Fast is the default. Standard adds five region checks only for strong model candidates, while Detailed analyzes nine regions."
+  },
+  "frequencyAnalysisModeLabel": {
+    "message": "Frequency analysis quality"
+  },
+  "frequencyCpuFallback": {
+    "message": "CPU (automatic fallback because GPU was unavailable)"
+  },
   "frequencyEvidence": {
     "message": "Frequency/noise analysis"
+  },
+  "frequencyModeDetailed": {
+    "message": "Detailed (256 px, 9 regions)"
+  },
+  "frequencyModeFast": {
+    "message": "Fast (64 px, 1 region)"
+  },
+  "frequencyModeStandard": {
+    "message": "Standard (128 px, 5 regions for candidates)"
+  },
+  "frequencyProfileDetail": {
+    "message": "Frequency analysis: $profile$ ($regions$ regions, $size$ px, $backend$$jpeg$)",
+    "placeholders": {
+      "profile": {
+        "content": "$1"
+      },
+      "regions": {
+        "content": "$2"
+      },
+      "size": {
+        "content": "$3"
+      },
+      "backend": {
+        "content": "$4"
+      },
+      "jpeg": {
+        "content": "$5"
+      }
+    }
+  },
+  "frequencyProfileDetailed": {
+    "message": "Detailed"
+  },
+  "frequencyProfileFast": {
+    "message": "Fast"
+  },
+  "frequencyProfileStandard": {
+    "message": "Standard"
   },
   "frequencyReinforced": {
     "message": "Frequency/noise analysis supports the image model"
@@ -246,8 +277,8 @@
   "insufficientReason": {
     "message": "No sufficient evidence of generative AI origin was found."
   },
-  "legacyCustom": {
-    "message": "Legacy custom model"
+  "jpegCompensatedSuffix": {
+    "message": ", JPEG-compensated"
   },
   "localModel": {
     "message": "Local image model"
@@ -334,9 +365,6 @@
   "methodPrefix": {
     "message": "Method: "
   },
-  "modelDisagreement": {
-    "message": "The image model and URL/description clues disagree; shown as Possibly AI"
-  },
   "modelLoadFirst": {
     "message": "$model$: loads on first use ($backend$; $thresholds$)",
     "placeholders": {
@@ -411,6 +439,30 @@
   "offscreenJustification": {
     "message": "Run image classification locally and share one model across all tabs."
   },
+  "openAiConsentAcknowledge": {
+    "message": "I understand the above and agree to use this feature at my own responsibility."
+  },
+  "openAiConsentCharge": {
+    "message": "Separate OpenAI API charges may apply, depending on your API usage and plan."
+  },
+  "openAiConsentData": {
+    "message": "The image file being checked is sent to OpenAI. The page URL, cookies, and page description are not sent."
+  },
+  "openAiConsentDescription": {
+    "message": "Review the following before enabling this feature."
+  },
+  "openAiConsentEnable": {
+    "message": "Agree and enable"
+  },
+  "openAiConsentRequired": {
+    "message": "You must check the acknowledgment box before enabling this feature."
+  },
+  "openAiConsentTerms": {
+    "message": "OpenAI's terms and data-handling policies apply to the uploaded data and API use."
+  },
+  "openAiConsentTitle": {
+    "message": "Enable OpenAI SynthID checks?"
+  },
   "openAiCountsNote": {
     "message": "OpenAI SynthID: $checks$/$limit$ checks; $detected$ with OpenAI-origin signals.",
     "placeholders": {
@@ -447,6 +499,9 @@
       }
     }
   },
+  "operationDemo": {
+    "message": "UI demo"
+  },
   "optionsTitle": {
     "message": "$name$ Settings v$version$",
     "placeholders": {
@@ -460,12 +515,6 @@
   },
   "pageConnected": {
     "message": "Connected to this page"
-  },
-  "pageDescription": {
-    "message": "Page description"
-  },
-  "pageHintEvidence": {
-    "message": "Page description"
   },
   "pageImageRetry": {
     "message": "Retrieved again from the page image"
@@ -660,12 +709,6 @@
   "ui028": {
     "message": "Show a gray badge when no generative AI evidence is found."
   },
-  "ui029": {
-    "message": "Use page descriptions"
-  },
-  "ui030": {
-    "message": "Check alt text, titles, and captions for wording such as AI-generated."
-  },
   "ui031": {
     "message": "Use the local image model"
   },
@@ -687,20 +730,11 @@
   "ui037": {
     "message": "CapCheck ViT-Base Q4 (CIFAKE, 57 MB)"
   },
-  "ui038": {
-    "message": "Community Forensics Custom (trained model not installed)"
-  },
-  "ui039": {
-    "message": "ResNet-18 Custom (trained model not installed)"
-  },
-  "ui040": {
-    "message": "Legacy custom model (trained model not installed)"
-  },
   "ui041": {
     "message": "Use GPU acceleration"
   },
   "ui042": {
-    "message": "Accelerate local inference with WebGPU. If unavailable or a GPU error occurs, automatically fall back to CPU (WASM). Off by default."
+    "message": "Accelerate the local image model and detailed-mode frequency FFT with WebGPU. Fast and standard frequency analysis use the CPU, and GPU failures automatically fall back to CPU. Off by default."
   },
   "ui043": {
     "message": "\"Possibly AI\" local threshold"
@@ -712,7 +746,7 @@
     "message": "\"AI [Model]\" strong local threshold"
   },
   "ui046": {
-    "message": "A score at or above this value, supported by frequency analysis or URL/description clues, produces \"AI [Model]\". Must not be below the \"Possibly AI\" threshold."
+    "message": "A score at or above this value, supported by frequency/noise analysis, produces \"AI [Model]\". Must not be below the \"Possibly AI\" threshold."
   },
   "ui047": {
     "message": "Use frequency/noise analysis"
@@ -721,7 +755,7 @@
     "message": "Use periodicity, residual noise, and 8-pixel boundaries as supporting evidence. This analysis alone does not classify an image as AI."
   },
   "ui049": {
-    "message": "Use OpenAI SynthID checks (highest priority)"
+    "message": "Use OpenAI SynthID checks"
   },
   "ui050": {
     "message": "Upload images to the official OpenAI API, prioritizing SynthID, then trusted C2PA. Authentication cookies are not used; images requiring login are not sent to OpenAI. Social-media conversion/compression may prevent detection. OpenAI's terms apply to API charges and uploaded data. Off by default."
@@ -763,7 +797,7 @@
     "message": "About detection"
   },
   "ui063": {
-    "message": "URL rules apply to the page you are viewing, not to image source URLs. Exclusions always take priority. Scores from bundled and custom models are not directly comparable; edits, compression, and unknown generators may change results."
+    "message": "URL rules apply to the page you are viewing, not to image source URLs. Exclusions always take priority. Scores from the three bundled models are not directly comparable; edits, compression, and unknown generators may change results."
   },
   "ui064": {
     "message": "Possibly AI threshold"
@@ -823,7 +857,7 @@
     "message": "Image with a Possibly AI badge"
   },
   "ui083": {
-    "message": "No generation metadata is present; only the alt description suggests generative AI."
+    "message": "This interaction demo simulates a 70% AI likelihood from the local image model. Page descriptions are not used for detection."
   },
   "ui084": {
     "message": "Image with a Possibly non-AI badge"
@@ -841,7 +875,7 @@
     "message": "Real HTTPS image URL"
   },
   "ui089": {
-    "message": "Loads an official Stable Diffusion sample from GitHub. URL/description evidence alone produces \"Possibly AI\"."
+    "message": "Loads an official Stable Diffusion sample from GitHub and analyzes only the image data. The URL and page description are not detection evidence."
   },
   "ui090": {
     "message": "OpenAI SynthID UI demo"
@@ -862,10 +896,10 @@
     "message": "Purple abstract background"
   },
   "ui096": {
-    "message": "AI-generated sample from the official Stable Diffusion repository"
+    "message": "Sample image from the official Stable Diffusion repository"
   },
   "unavailableCount": {
-    "message": "File metadata was unavailable for $count$ images due to source restrictions. URL/description analysis continues.",
+    "message": "Analysis could not be completed for $count$ images because the image source blocked access to the image data.",
     "placeholders": {
       "count": {
         "content": "$1"

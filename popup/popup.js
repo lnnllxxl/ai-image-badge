@@ -159,7 +159,7 @@ function render(stats, context = {}) {
       : t("allowlistHelp", "許可リストにルールがあるため、このページでは解析しません。設定画面でURLを追加できます。");
   } else if (stats.unavailable > 0) {
     networkNote.hidden = false;
-    networkNote.textContent = t("unavailableCount", `${stats.unavailable}件は画像配信元の制限によりファイル内情報を取得できませんでした。URL・説明文の判定は継続しています。`, [stats.unavailable]);
+    networkNote.textContent = t("unavailableCount", `${stats.unavailable}件は画像配信元の制限により画像本体を取得できず、判定を完了できませんでした。`, [stats.unavailable]);
   } else {
     networkNote.hidden = true;
   }

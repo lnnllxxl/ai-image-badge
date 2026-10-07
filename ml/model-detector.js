@@ -80,16 +80,17 @@ async function releaseSession(modelId) {
   } catch {}
 }
 
-async function getWeights(id, config) {
-  if (!weightsCache.has(id)) {
-    weightsCache.set(id, fetch(chrome.runtime.getURL(`model/${config.weights}`))
+async function getWeights(id, filename) {
+  const cacheKey = `${id}:${filename}`;
+  if (!weightsCache.has(cacheKey)) {
+    weightsCache.set(cacheKey, fetch(chrome.runtime.getURL(`model/${filename}`))
       .then((response) => {
         if (!response.ok) throw new Error(`model weights unavailable: ${id}`);
         return response.arrayBuffer();
       })
       .then((buffer) => new Uint8Array(buffer)));
   }
-  return weightsCache.get(id);
+  return weightsCache.get(cacheKey);
 }
 
 function createSession(weights, provider) {
@@ -97,6 +98,20 @@ function createSession(weights, provider) {
     executionProviders: [provider],
     graphOptimizationLevel: "all"
   });
+}
+
+async function createSessionFromFile(id, filename, provider) {
+  try {
+    return await createSession(await getWeights(id, filename), provider);
+  } finally {
+    // The session owns the compiled model after creation, so the download
+    // buffer is no longer needed.
+    weightsCache.delete(`${id}:${filename}`);
+  }
+}
+
+async function createConfiguredSession(id, config, provider) {
+  return createSessionFromFile(id, config.weights, provider);
 }
 
 export async function modelStatus(modelId = "community", useGpuAcceleration = false) {
@@ -128,7 +143,6 @@ export async function loadModel(modelId = "community", useGpuAcceleration = fals
 
   const promise = (async () => {
     await releaseSession(id);
-    const weights = await getWeights(id, config);
     const webGpuAvailable = canUseWebGpu();
     const providers = gpuRequested && webGpuAvailable ? ["webgpu", "wasm"] : ["wasm"];
     if (gpuRequested && !webGpuAvailable) {
@@ -139,7 +153,7 @@ export async function loadModel(modelId = "community", useGpuAcceleration = fals
     let lastError;
     for (const provider of providers) {
       try {
-        const session = await createSession(weights, provider);
+        const session = await createConfiguredSession(id, config, provider);
         sessions.set(id, session);
         backends.set(id, provider);
         sessionPreferences.set(id, gpuRequested);
@@ -161,7 +175,7 @@ export async function loadModel(modelId = "community", useGpuAcceleration = fals
 async function fallBackToWasm(id, config, gpuError) {
   gpuErrors.set(id, errorMessage(gpuError));
   await releaseSession(id);
-  const session = await createSession(await getWeights(id, config), "wasm");
+  const session = await createConfiguredSession(id, config, "wasm");
   sessions.set(id, session);
   backends.set(id, "wasm");
   // GPUを希望した結果としてWASMへ切り替えたことを状態表示に残す。

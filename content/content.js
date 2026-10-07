@@ -9,11 +9,11 @@
     urlExcludeList: "",
     showLikely: true,
     showUndetermined: true,
-    usePageHints: true,
     usePixelClassifier: true,
     localModel: "community",
     useGpuAcceleration: false,
     useFrequencyAnalysis: true,
+    frequencyAnalysisMode: "fast",
     localLikelyThreshold: 50,
     localConfirmedThreshold: 90,
     useOpenAiProvenance: false,
@@ -156,23 +156,9 @@
     (document.documentElement || document.body).append(overlayHost);
   }
 
-  function contextForImage(element) {
-    const values = [
-      element.getAttribute?.("alt"),
-      element.getAttribute?.("title"),
-      element.getAttribute?.("aria-label")
-    ];
-    const figure = element.closest?.("figure");
-    if (figure) values.push(figure.querySelector("figcaption")?.textContent);
-    const article = element.closest?.("article");
-    if (article && /AI\s*で\s*生成/i.test(article.textContent || "")) {
-      values.push("AIで生成");
-    }
-    return values.filter(Boolean).join(" | ").replace(/\s+/g, " ").slice(0, 700);
-  }
-
   function openAiErrorMessage(code) {
     const messages = {
+      "missing-consent": t("errMissingConsent", "OpenAIへの画像送信とAPI料金に関する同意が未完了です。設定画面で有効化し直してください。"),
       "missing-api-key": t("errMissingKey", "OpenAI APIキーが未設定です。"),
       "api-http-400": t("errBadImage", "OpenAI APIが画像を受け付けませんでした。"),
       "api-http-401": t("errInvalidKey", "OpenAI APIキーが無効です。"),
@@ -331,6 +317,9 @@
       appendDetailParagraph(detail, presentation.localScore, t("scorePrefix", "ローカルモデルスコア："));
     }
     for (const reason of reasons) appendDetailParagraph(detail, reason);
+    if (result.analysis?.frequencySummary) {
+      appendDetailParagraph(detail, result.analysis.frequencySummary);
+    }
     for (const advisory of result.analysis?.contextAdvisories || []) {
       appendDetailParagraph(detail, advisory, t("advisoryPrefix", "参考情報："));
     }
@@ -348,7 +337,7 @@
       result,
       sourceUrl,
       pageUrl: location.href,
-      altText: contextForImage(element),
+      altText: "",
       sendMessage
     });
 
@@ -416,9 +405,8 @@
       return;
     }
 
-    const hints = settings.usePageHints ? contextForImage(element) : "";
     const testFixture = testFixtureResult(element, url);
-    const baseKey = `${url}\n${hints}`;
+    const baseKey = url;
     let useOpenAiProvenance = false;
     if (!testFixture && settings.useOpenAiProvenance) {
       if (openAiSourceKeys.has(url)) {
@@ -428,7 +416,7 @@
         useOpenAiProvenance = true;
       }
     }
-    const key = `${baseKey}\nfixture:${testFixture ? 1 : 0}\nopenai:${useOpenAiProvenance ? 1 : 0}\nmodel:${settings.localModel}\ngpu:${settings.useGpuAcceleration ? 1 : 0}\nthresholds:${settings.localLikelyThreshold}:${settings.localConfirmedThreshold}`;
+    const key = `${baseKey}\nfixture:${testFixture ? 1 : 0}\nopenai:${useOpenAiProvenance ? 1 : 0}\nmodel:${settings.localModel}\ngpu:${settings.useGpuAcceleration ? 1 : 0}\nfrequency:${settings.useFrequencyAnalysis ? settings.frequencyAnalysisMode : "off"}\nthresholds:${settings.localLikelyThreshold}:${settings.localConfirmedThreshold}`;
     if (element.dataset.aiImageBadgeKey === key) return;
     element.dataset.aiImageBadgeKey = key;
     removeRecord(element);
@@ -438,12 +426,11 @@
       pending = testFixture ? Promise.resolve(testFixture) : sendMessage({
         type: "inspect-image",
         url,
-        hints,
-        usePageHints: settings.usePageHints,
         usePixelClassifier: settings.usePixelClassifier,
         localModel: settings.localModel,
         useGpuAcceleration: settings.useGpuAcceleration,
         useFrequencyAnalysis: settings.useFrequencyAnalysis,
+        frequencyAnalysisMode: settings.frequencyAnalysisMode,
         localLikelyThreshold: settings.localLikelyThreshold,
         localConfirmedThreshold: settings.localConfirmedThreshold,
         useOpenAiProvenance,
@@ -600,14 +587,14 @@
     if (![
       "community",
       "distilled",
-      "capcheck",
-      "community-forensics-custom",
-      "resnet18-custom",
-      "chatgpt-custom"
+      "capcheck"
     ].includes(settings.localModel)) {
       settings.localModel = DEFAULTS.localModel;
     }
     settings.useGpuAcceleration = Boolean(settings.useGpuAcceleration);
+    if (!["fast", "standard", "detailed"].includes(settings.frequencyAnalysisMode)) {
+      settings.frequencyAnalysisMode = DEFAULTS.frequencyAnalysisMode;
+    }
     settings.localLikelyThreshold = Math.min(99, Math.max(1,
       Number(settings.localLikelyThreshold) || DEFAULTS.localLikelyThreshold));
     settings.localConfirmedThreshold = Math.min(99, Math.max(settings.localLikelyThreshold,
@@ -639,6 +626,7 @@
       unavailable: unavailableCount,
       localModel: settings.localModel,
       useGpuAcceleration: settings.useGpuAcceleration,
+      frequencyAnalysisMode: settings.frequencyAnalysisMode,
       localLikelyThreshold: settings.localLikelyThreshold,
       localConfirmedThreshold: settings.localConfirmedThreshold,
       openAiEnabled: settings.useOpenAiProvenance,
@@ -724,7 +712,7 @@
       subtree: true,
       childList: true,
       attributes: true,
-      attributeFilter: ["src", "srcset", "style", "class", "alt", "title", "aria-label"]
+      attributeFilter: ["src", "srcset", "style", "class"]
     });
   }
 

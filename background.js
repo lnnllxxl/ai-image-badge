@@ -4,7 +4,6 @@ import {
   MAX_IMAGE_BYTES,
   fuseDetectionResults,
   inspectBytes,
-  inspectPageHints,
   inspectUrl
 } from "./detector.js";
 import { requestOpenAiProvenance } from "./openai-provenance.js";
@@ -28,14 +27,16 @@ let creatingOffscreen = null;
 const LOCAL_MODELS = new Set([
   "community",
   "distilled",
-  "capcheck",
-  "community-forensics-custom",
-  "resnet18-custom",
-  "chatgpt-custom"
+  "capcheck"
 ]);
+const FREQUENCY_ANALYSIS_MODES = new Set(["fast", "standard", "detailed"]);
 
 function normalizeLocalModel(value) {
   return LOCAL_MODELS.has(value) ? value : "community";
+}
+
+function normalizeFrequencyAnalysisMode(value) {
+  return FREQUENCY_ANALYSIS_MODES.has(value) ? value : "fast";
 }
 
 function normalizeThresholdPercent(value, fallback) {
@@ -183,12 +184,15 @@ async function analyzeLocalPixels(
   url,
   usePixelClassifier,
   useFrequencyAnalysis,
+  frequencyAnalysisMode,
+  localConfirmedThreshold,
   localModel,
   useGpuAcceleration
 ) {
   if (!usePixelClassifier && !useFrequencyAnalysis) return null;
   const selectedModel = normalizeLocalModel(localModel);
-  const key = `${url}\n${usePixelClassifier ? 1 : 0}${useFrequencyAnalysis ? 1 : 0}\nmodel:${selectedModel}\ngpu:${useGpuAcceleration ? 1 : 0}`;
+  const selectedFrequencyMode = normalizeFrequencyAnalysisMode(frequencyAnalysisMode);
+  const key = `${url}\n${usePixelClassifier ? 1 : 0}${useFrequencyAnalysis ? 1 : 0}\nfrequency:${selectedFrequencyMode}:${localConfirmedThreshold}\nmodel:${selectedModel}\ngpu:${useGpuAcceleration ? 1 : 0}`;
   if (localAnalysisCache.has(key)) return localAnalysisCache.get(key);
   await ensureOffscreen();
   const result = await chrome.runtime.sendMessage({
@@ -197,6 +201,8 @@ async function analyzeLocalPixels(
     url,
     usePixelClassifier,
     useFrequencyAnalysis,
+    frequencyAnalysisMode: selectedFrequencyMode,
+    localConfirmedThreshold,
     localModel: selectedModel,
     useGpuAcceleration: Boolean(useGpuAcceleration)
   });
@@ -290,7 +296,11 @@ function enqueueOpenAi(task) {
 async function analyzeOpenAiProvenance(url) {
   const provenanceUrl = normalizeProvenanceImageUrl(url);
   if (openAiProvenanceCache.has(provenanceUrl)) return openAiProvenanceCache.get(provenanceUrl);
-  const { openAiApiKey = "" } = await chrome.storage.local.get({ openAiApiKey: "" });
+  const { openAiApiKey = "", openAiConsentAccepted = false } = await chrome.storage.local.get({
+    openAiApiKey: "",
+    openAiConsentAccepted: false
+  });
+  if (!openAiConsentAccepted) return { checked: false, detected: false, error: "missing-consent" };
   if (!openAiApiKey) return { checked: false, detected: false, error: "missing-api-key" };
 
   return enqueueOpenAi(async () => {
@@ -324,10 +334,9 @@ async function analyzeOpenAiProvenance(url) {
 async function inspectImage(message) {
   const {
     url,
-    hints = "",
-    usePageHints = true,
     usePixelClassifier = true,
     useFrequencyAnalysis = true,
+    frequencyAnalysisMode = "fast",
     localModel = "community",
     useGpuAcceleration = false,
     useOpenAiProvenance = false,
@@ -335,17 +344,16 @@ async function inspectImage(message) {
     localConfirmedThreshold = 90
   } = message;
   const selectedModel = normalizeLocalModel(localModel);
+  const selectedFrequencyMode = normalizeFrequencyAnalysisMode(frequencyAnalysisMode);
   const likelyThresholdPercent = normalizeThresholdPercent(localLikelyThreshold, 50);
   const confirmedThresholdPercent = Math.max(
     likelyThresholdPercent,
     normalizeThresholdPercent(localConfirmedThreshold, 90)
   );
-  const hintKey = usePageHints ? hints.slice(0, 500) : "";
-  const cacheKey = `${url}\n${hintKey}\n${usePixelClassifier ? 1 : 0}${useFrequencyAnalysis ? 1 : 0}${useOpenAiProvenance ? 1 : 0}\nmodel:${selectedModel}\ngpu:${useGpuAcceleration ? 1 : 0}\nthresholds:${likelyThresholdPercent}:${confirmedThresholdPercent}`;
+  const cacheKey = `${url}\n${usePixelClassifier ? 1 : 0}${useFrequencyAnalysis ? 1 : 0}${useOpenAiProvenance ? 1 : 0}\nfrequency:${selectedFrequencyMode}\nmodel:${selectedModel}\ngpu:${useGpuAcceleration ? 1 : 0}\nthresholds:${likelyThresholdPercent}:${confirmedThresholdPercent}`;
   if (resultCache.has(cacheKey)) return resultCache.get(cacheKey);
 
   const urlResult = inspectUrl(url);
-  const hintResult = usePageHints ? inspectPageHints(hints) : null;
   let byteResult = null;
   let unavailable = false;
   let localAnalysis = null;
@@ -368,6 +376,8 @@ async function inspectImage(message) {
         url,
         usePixelClassifier,
         useFrequencyAnalysis,
+        selectedFrequencyMode,
+        confirmedThresholdPercent,
         selectedModel,
         useGpuAcceleration
       )
@@ -413,7 +423,6 @@ async function inspectImage(message) {
     ...fuseDetectionResults({
       byteResult,
       urlResult,
-      hintResult,
       localAnalysis,
       openAiProvenance,
       localThresholds: {
@@ -463,11 +472,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName === "local" && changes.openAiApiKey) {
+  if (areaName === "local" && (changes.openAiApiKey || changes.openAiConsentAccepted)) {
     openAiProvenanceCache.clear();
     resultCache.clear();
   }
-  if (areaName === "sync" && (changes.localModel || changes.useGpuAcceleration)) {
+  if (areaName === "sync" && (
+    changes.localModel ||
+    changes.useGpuAcceleration ||
+    changes.useFrequencyAnalysis ||
+    changes.frequencyAnalysisMode ||
+    changes.localConfirmedThreshold
+  )) {
     localAnalysisCache.clear();
     resultCache.clear();
   }

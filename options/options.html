@@ -34,10 +34,6 @@
         <input type="checkbox" name="showUndetermined">
       </label>
       <label class="row">
-        <span><b data-i18n="ui029">ページ上の説明文を使う</b><small data-i18n="ui030">alt、title、キャプションに「AI生成」などの表現があるか確認します。</small></span>
-        <input type="checkbox" name="usePageHints">
-      </label>
-      <label class="row">
         <span><b data-i18n="ui031">ローカル画像モデルを使う</b><small data-i18n="ui032">選択したViTモデルで画像のピクセルを端末内解析します。初回は同梱モデルの読み込みに時間がかかります。</small></span>
         <input type="checkbox" name="usePixelClassifier">
       </label>
@@ -47,13 +43,10 @@
           <option value="community" data-i18n="ui035">Community Forensics ViT（標準・87MB）</option>
           <option value="distilled" data-i18n="ui036">Distilled ViT Q4（軽量・11MB）</option>
           <option value="capcheck" data-i18n="ui037">CapCheck ViT-Base Q4（CIFAKE・57MB）</option>
-          <option value="community-forensics-custom" disabled data-i18n="ui038">Community Forensics Custom（学習モデル未導入）</option>
-          <option value="resnet18-custom" disabled data-i18n="ui039">ResNet-18 Custom（学習モデル未導入）</option>
-          <option value="chatgpt-custom" disabled data-i18n="ui040">旧カスタムモデル（学習モデル未導入）</option>
         </select>
       </label>
       <label class="row">
-        <span><b data-i18n="ui041">グラフィックボード（GPU）を使用する</b><small data-i18n="ui042">ローカル画像モデルをWebGPUで高速化します。利用できない環境やGPU実行エラー時は、自動的にCPU（WASM）へ切り替えます。既定はオフです。</small></span>
+        <span><b data-i18n="ui041">グラフィックボード（GPU）を使用する</b><small data-i18n="ui042">ローカル画像モデルと詳細モードの周波数FFTをWebGPUで高速化します。高速・標準の周波数解析はCPUを使用し、GPU利用不可時もCPUへ自動切替します。既定はオフです。</small></span>
         <input type="checkbox" name="useGpuAcceleration">
       </label>
       <label class="row size-row">
@@ -63,7 +56,7 @@
         </span>
       </label>
       <label class="row size-row">
-        <span><b data-i18n="ui045">「AI【モデル判定】」の強いローカル判定しきい値</b><small data-i18n="ui046">この値以上かつ周波数解析・URL・説明文の根拠が一致した場合に「AI【モデル判定】」にします。「AIかも」のしきい値未満には設定できません。</small></span>
+        <span><b data-i18n="ui045">「AI【モデル判定】」の強いローカル判定しきい値</b><small data-i18n="ui046">この値以上かつ周波数・ノイズ解析の根拠が一致した場合に「AI【モデル判定】」にします。「AIかも」のしきい値未満には設定できません。</small></span>
         <span class="size-inputs">
           <input type="number" name="localConfirmedThreshold" min="1" max="99" step="1" aria-label="強いAI判定しきい値" data-i18n-aria-label="ui065"> %
         </span>
@@ -72,8 +65,16 @@
         <span><b data-i18n="ui047">周波数・ノイズ解析を使う</b><small data-i18n="ui048">周期性、残差ノイズ、8px境界を補助根拠にします。この解析だけでAIとは判定しません。</small></span>
         <input type="checkbox" name="useFrequencyAnalysis">
       </label>
+      <label class="row model-row">
+        <span><b data-i18n="frequencyAnalysisModeLabel">周波数解析の品質</b><small data-i18n="frequencyAnalysisModeHelp">初期値は高速です。標準では強いモデル候補だけ5領域を追加解析し、詳細では9領域を解析します。</small></span>
+        <select name="frequencyAnalysisMode" aria-label="周波数解析の品質" data-i18n-aria-label="frequencyAnalysisModeLabel">
+          <option value="fast" data-i18n="frequencyModeFast">高速（64px・1領域）</option>
+          <option value="standard" data-i18n="frequencyModeStandard">標準（候補のみ128px・5領域）</option>
+          <option value="detailed" data-i18n="frequencyModeDetailed">詳細（256px・9領域）</option>
+        </select>
+      </label>
       <label class="row warning-row">
-        <span><b data-i18n="ui049">OpenAI SynthID検証を使う（最優先）</b><small data-i18n="ui050">画像をOpenAI公式APIへアップロードし、SynthIDを最優先、次に信頼済みC2PAを確認します。画像取得時に認証用Cookieは送らず、ログインが必要な画像はOpenAIへ送信しません。SNSで変換・圧縮された画像は検出できない場合があります。API利用料・送信データにはOpenAIの条件が適用されます。既定はオフです。</small></span>
+        <span><b data-i18n="ui049">OpenAI SynthID検証を使う</b><small data-i18n="ui050">画像をOpenAI公式APIへアップロードし、SynthIDを最優先、次に信頼済みC2PAを確認します。画像取得時に認証用Cookieは送らず、ログインが必要な画像はOpenAIへ送信しません。SNSで変換・圧縮された画像は検出できない場合があります。API利用料・送信データにはOpenAIの条件が適用されます。既定はオフです。</small></span>
         <input type="checkbox" name="useOpenAiProvenance">
       </label>
       <div class="row secret-row">
@@ -109,9 +110,30 @@
 
     <section class="notice">
       <h2 data-i18n="ui062">判定について</h2>
-      <p data-i18n="ui063">URLルールは閲覧中のページURLへ適用され、画像配信元URLには適用されません。除外リストが常に優先されます。同梱3モデルと追加学習モデルの確率は同じ尺度ではなく、画像の編集・圧縮・未知の生成器で結果が変わります。</p>
+      <p data-i18n="ui063">URLルールは閲覧中のページURLへ適用され、画像配信元URLには適用されません。除外リストが常に優先されます。同梱3モデルの確率は同じ尺度ではなく、画像の編集・圧縮・未知の生成器で結果が変わります。</p>
     </section>
   </main>
+
+  <dialog id="openai-consent-dialog" aria-labelledby="openai-consent-title" aria-describedby="openai-consent-description">
+    <div class="consent-dialog-content">
+      <h2 id="openai-consent-title" data-i18n="openAiConsentTitle">OpenAI SynthID検証を有効にしますか？</h2>
+      <p id="openai-consent-description" data-i18n="openAiConsentDescription">有効にする前に、次の内容を確認してください。</p>
+      <ul>
+        <li data-i18n="openAiConsentCharge">OpenAI APIの利用状況や契約によって、API料金が別途発生する場合があります。</li>
+        <li data-i18n="openAiConsentData">検証対象の画像ファイルがOpenAIへ送信されます。ページURL、Cookie、ページの説明文は送信しません。</li>
+        <li data-i18n="openAiConsentTerms">送信データとAPI利用には、OpenAIの利用条件およびデータ取扱い方針が適用されます。</li>
+      </ul>
+      <label class="consent-confirmation">
+        <input id="openai-consent-checkbox" type="checkbox">
+        <span data-i18n="openAiConsentAcknowledge">上記を理解し、自己の責任でこの機能を使用することに同意します。</span>
+      </label>
+      <p id="openai-consent-error" class="consent-error" role="alert" hidden data-i18n="openAiConsentRequired">有効にするには、確認欄へのチェックが必要です。</p>
+      <div class="consent-actions">
+        <button id="openai-consent-cancel" type="button" class="secondary" data-i18n="cancel">キャンセル</button>
+        <button id="openai-consent-accept" type="button" disabled data-i18n="openAiConsentEnable">同意して有効にする</button>
+      </div>
+    </div>
+  </dialog>
   <script src="../i18n.js"></script>
   <script src="options.js"></script>
 </body>

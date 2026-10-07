@@ -108,11 +108,44 @@ button {
 }
 button:hover { background: #7c3aed; }
 button.secondary { border: 1px solid #475569; background: #1e293b; }
+button:disabled { opacity: .48; cursor: not-allowed; }
+button:disabled:hover { background: #6d28d9; }
 #saved { color: #86efac; font-size: 13px; }
 
 .notice { margin-top: 18px; padding: 18px 20px; }
 .notice h2 { margin: 0 0 6px; color: #fff; font-size: 15px; }
 .notice p { margin: 0; color: #94a3b8; font-size: 13px; line-height: 1.7; }
+
+dialog {
+  width: min(560px, calc(100% - 32px));
+  padding: 0;
+  border: 1px solid #475569;
+  border-radius: 16px;
+  color: #e2e8f0;
+  background: #111b2e;
+  box-shadow: 0 24px 80px rgba(0,0,0,.55);
+}
+dialog::backdrop { background: rgba(2, 6, 23, .78); }
+.consent-dialog-content { padding: 24px; }
+.consent-dialog-content h2 { margin: 0 0 10px; color: #fff; font-size: 20px; }
+.consent-dialog-content p, .consent-dialog-content li { color: #cbd5e1; font-size: 14px; line-height: 1.65; }
+.consent-dialog-content ul { margin: 14px 0 18px; padding-left: 22px; }
+.consent-dialog-content li + li { margin-top: 8px; }
+.consent-confirmation {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid #475569;
+  border-radius: 10px;
+  color: #f8fafc;
+  background: #0f172a;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.consent-confirmation input { margin-top: 2px; }
+.consent-error { margin: 10px 0 0; color: #fca5a5 !important; }
+.consent-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
 
 @media (max-width: 560px) {
   main { margin: 24px auto; }
@@ -121,4 +154,5 @@ button.secondary { border: 1px solid #475569; background: #1e293b; }
   textarea { width: 100%; }
   .secret-controls { width: 100%; flex-basis: auto; }
   input[type="password"], input[type="text"] { width: 100%; }
+  .consent-actions { align-items: stretch; flex-direction: column-reverse; }
 }

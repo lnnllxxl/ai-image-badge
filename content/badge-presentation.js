@@ -25,10 +25,6 @@
         return t("methodFrequency", `${localModelName(result)}＋周波数・ノイズ解析`, [localModelName(result)]);
       case "pixel-model":
         return localModelName(result);
-      case "page-context":
-        return t("pageDescription", "ページ説明");
-      case "conflicting-signals":
-        return t("conflictingEvidence", "複数の根拠が不一致");
       default:
         return t("combinedAssessment", "総合判定");
     }
@@ -86,7 +82,7 @@
       };
     }
 
-    if (status === "likely" || result.unavailable || c2paDetected || result.basis === "conflicting-signals") {
+    if (status === "likely" || result.unavailable || c2paDetected) {
       return {
         kind: "likely",
         text: c2paDetected ? t("badgeMaybeC2pa", "AIかも【C2PA】") : t("badgeMaybe", "AIかも"),

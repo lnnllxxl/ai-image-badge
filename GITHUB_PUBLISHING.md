@@ -1,6 +1,6 @@
 # GitHub公開手順
 
-このフォルダーは **AI IMAGE BADGE v0.13.1** の公開用ソースです。APIキー、学習画像、教育ラベル、仮想環境、依存パッケージ、作業キャッシュ、過去の配布物は含めません。
+このフォルダーは **AI IMAGE BADGE v0.13.9** の公開用ソースです。APIキー、学習画像、教育ラベル、仮想環境、依存パッケージ、作業キャッシュ、過去の配布物は含めません。
 
 ## ライセンス
 
@@ -26,7 +26,7 @@ git init -b main
 git add .
 git lfs ls-files
 git status
-git commit -m "Release v0.13.1"
+git commit -m "Release v0.13.9"
 git remote add origin https://github.com/OWNER/REPOSITORY.git
 git push -u origin main
 ```
@@ -51,7 +51,7 @@ Claudeによる静的レビューのレポートと、パッケージ構成を�
 
 一般利用者には、GitHub Releasesへ次の一般版ZIPだけを添付します。管理者版、教育UI、学習ツール、管理者用ソースはGitHub公開対象に含めません。
 
-- `ai-image-badge-release-v0.13.1.zip`
+- `ai-image-badge-release-v0.13.9.zip`
 
 GitHub公開セットの `02_GITHUB_RELEASE_ASSETS` に、一般版ZIPとSHA-256一覧をまとめます。GitHubのリポジトリ本体ではなく、リポジトリ画面の **Releases** から新しいリリースを作り、一般版ZIPだけを添付してください。
 
@@ -63,7 +63,6 @@ ZIPのままChromeへ読み込むことはできません。利用者はZIPを�
 - 教育・学習に使った画像やラベルJSON
 - `.venv`、`node_modules`、Pythonキャッシュ
 - `work`、`outputs` などのローカル作業フォルダー
-- 学習済みカスタムモデルとPyTorchチェックポイント（公開権利を確認した場合を除く）
 - 管理者版マニフェスト、管理者用バックグラウンドコード、教育UI、教育データ処理、学習ツール
 
 OpenAI APIキーはコードや配布ZIPへ埋め込まず、各利用者が拡張機能の設定画面から入力します。
